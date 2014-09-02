@@ -17,10 +17,10 @@ Twitter.init = function() {
   return this;
 };
 
-Twitter.stream = function(options, callback) {
+Twitter.startStream = function(type, options, callback) {
   var _this = this;
 
-  this.client.stream('statuses/filter', options, function(stream) {
+  this.client.stream(type, options, function(stream) {
     _this.stream = stream;
     callback(stream);
   });
@@ -29,7 +29,7 @@ Twitter.stream = function(options, callback) {
 };
 
 Twitter.track = function(topics, callback) {
-  this.stream({track: topics}, function(stream) {
+  this.startStream('statuses/filter', {track: topics}, function(stream) {
 
     stream.on('data', function(data) {
       var response = formatResponse(topics, data.text);
@@ -41,6 +41,7 @@ Twitter.track = function(topics, callback) {
 };
 
 Twitter.destroyStream = function() {
+  if(!this.stream) throw new Error('Stream not initialized.');
   this.stream.destroy();
 };
 
