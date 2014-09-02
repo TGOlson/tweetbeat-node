@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/TGOlson/tweetbeat-node",
   "dependencies": {
-    "twitter": "^0.2.9"
+    "twitter": "^0.2.9",
+    "dotenv": "^0.4.0",
+    "http": "0.0.0"
   }
 }

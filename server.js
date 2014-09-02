@@ -1,6 +1,8 @@
 var http = require('http'),
-  net = require('net'),
+  dotenv = require('dotenv');
   twitter = require('twitter');
+
+dotenv.load();
 
 var TOPICS = [
   'nodejs',
@@ -16,11 +18,11 @@ var config = {
 };
 
 var twit = new twitter({
-    consumer_key: 'P1YfOZUJ7CN1KvTsbeB1MWUyp',
-    consumer_secret: 'oCJnEW1QeOE4U7z9xWlSN7cW7D6szus6BaLyHpTdzr1jXKeDRJ',
-    access_token_key: '316057830-XPhMevXI8mpZAhrXdLbpKaoEZINUY7iBHwRk3c7J',
-    access_token_secret: '10pNil56iFX21zFhcg5KnE99i2qXCq1Qpksy4lqYPtkFB'
-  });
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
 
 var server = http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -29,11 +31,6 @@ var server = http.createServer(function (req, res) {
     res.write('Hello World\n');
   }, 50);
 });
-
-// var server = net.createServer(function (socket) {
-//   socket.write('Echo server\r\n');
-//   socket.pipe(socket);
-// });
 
 twit.stream('statuses/filter', {track: TOPICS}, function(stream) {
 
