@@ -1,0 +1,23 @@
+{
+  "name": "tweetbeat-node",
+  "version": "0.0.0",
+  "description": "Tweetbeat in node.",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TGOlson/tweetbeat-node.git"
+  },
+  "author": "Tyler Olson <tydotg@gmail.com> (http://tgolson.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TGOlson/tweetbeat-node/issues"
+  },
+  "homepage": "https://github.com/TGOlson/tweetbeat-node",
+  "dependencies": {
+    "twitter": "^0.2.9"
+  }
+}
