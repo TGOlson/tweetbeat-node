@@ -1,12 +1,16 @@
+// Third party libraries
 var TwitterClient = require('twitter'),
   _ = require('lodash');
 
 var Twitter = {
   client: null,
-  stream: null
+  stream: null,
+  callbacks: []
 };
 
 Twitter.init = function() {
+  if(this.client) throw new Error('Twitter client already initialized.');
+
   this.client = new TwitterClient({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -18,31 +22,31 @@ Twitter.init = function() {
 };
 
 Twitter.startStream = function(type, options, callback) {
+  if(this.stream) throw new Error('Twitter stream already initialized.');
+
   var _this = this;
 
   this.client.stream(type, options, function(stream) {
     _this.stream = stream;
-    callback(stream);
+    if(callback) callback(stream);
   });
 
   return this;
 };
 
 Twitter.track = function(topics, callback) {
-  this.startStream('statuses/filter', {track: topics}, function(stream) {
+  if(!this.stream) throw new Error('Twitter stream not initialized.');
 
-    stream.on('data', function(data) {
-      var response = formatResponse(topics, data.text);
-      callback(response);
-    });
+  this.stream.on('data', function(data) {
+    console.log('tracking', topics);
+
+    var response = formatResponse(topics, data.text);
+
+    // invoke callback if tweet contains topic client is looking for
+    if(response.topic) callback(response);
   });
 
   return this;
-};
-
-Twitter.destroyStream = function() {
-  if(!this.stream) throw new Error('Stream not initialized.');
-  this.stream.destroy();
 };
 
 function formatResponse(topics, text) {
@@ -59,5 +63,11 @@ function formatResponse(topics, text) {
 
   return response;
 }
+
+Twitter.destroyStream = function() {
+  if(!this.stream) throw new Error('Stream not initialized.');
+  this.stream.destroy();
+};
+
 
 module.exports = Twitter;

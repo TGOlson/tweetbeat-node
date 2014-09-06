@@ -29,3 +29,28 @@ Run the app
 ```
 node server.js
 ```
+
+## Development
+
+To start the app with the Twitter stream initialized, set `STREAM=true`. This allows for conditionally connecting to the twitter stream, which is important to limit requests when in development.
+```
+STREAM=true node server.js
+````
+
+Test connecting to the stream from the command line. This will default to subscribing to all topics.
+```
+curl localhost:8080/stream
+````
+
+Subscribe to only some topics.
+```
+curl localhost:8080/stream?topics=usa,ruby
+````
+
+See a list of all available topics.
+```
+curl localhost:8080/topics
+````
+
+## TODO
+* Integrate web sockets - right now there is a huge memory leak with callback pilling up
