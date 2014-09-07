@@ -1,5 +1,6 @@
 // Third party libraries
-var TwitterClient = require('twitter');
+var TwitterClient = require('twitter'),
+  _ = require('lodash');
 
 var Twitter = {
   _client: null,
@@ -47,6 +48,23 @@ Twitter.destroyStream = function() {
 
   this._stream.destroy();
   this._stream = null;
+};
+
+Twitter.parseTweet = function(data, topics) {
+  var text = data.text;
+
+  var response = {
+    topic: null,
+    text: text
+  };
+
+  _.each(topics, function(topic) {
+    if (_.contains(text.toLowerCase(), topic)) {
+      response.topic = topic;
+    }
+  });
+
+  return response;
 };
 
 module.exports = Twitter;

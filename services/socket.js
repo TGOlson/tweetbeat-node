@@ -1,48 +1,49 @@
 // Third party libraries
-var _ = require('lodash');
+var _ = require('lodash'),
+  WebSocketServer = require('ws').Server;
+
 
 var Socket = {
-
-  // hash of current sockets
-  // key = name = socket.remoteAddress:socket.remotePort
-  // value = socket
-  _sockets: {},
+  _socketServer: null,
 
   // mainly used for logging
   _socketCount: 0
 };
 
+Socket.init = function(server) {
+  this._socketServer = new WebSocketServer({server: server});
+  this._setListeners(this._socketServer);
+};
 
-// consider moving to instance based sockets
-// this would decorate the default sockets
-// var socket = new Socket(req.socket);
+Socket._setListeners = function(socketServer) {
+  var _this = this;
 
+  this._socketServer.on("connection", function(socket) {
+    _this._addSocket();
 
-Socket.add = function(socket) {
-  socket.name = this._buildName(socket);
+    socket.on("close", function() {
+      _this._removeSocket();
+    });
+  });
+};
 
-  this._sockets[socket.name] = socket;
+// add and remove does not do anything functional - they just log data
+Socket._addSocket = function() {
   this._socketCount++;
-
-  console.log('Connected: ' + socket.name);
+  console.log("Websocket connection open");
   console.log('Current sockets: ' + this._socketCount);
 };
 
-Socket._buildName = function(socket) {
-  return socket.remoteAddress + ':' + socket.remotePort;
-};
-
-Socket.remove = function(socket) {
-  delete this._sockets[socket.name];
+Socket._removeSocket = function() {
+  console.log("Websocket connection close");
+  console.log('Current sockets: ' + this._socketCount);
   this._socketCount--;
-
-  console.log('Closed: ' + socket.name);
-  console.log('Current sockets: ' + this._socketCount);
 };
 
-Socket.broadcast = function(callback) {
-  _.each(this._sockets, function(socket, name) {
-    callback(socket);
+Socket.broadcast = function(data) {
+  _.each(this._socketServer.clients, function(socket) {
+    var formattedData = JSON.stringify(data) + '\n';
+    socket.send(formattedData);
   });
 };
 

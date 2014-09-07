@@ -1,15 +1,23 @@
 // Third party libraries
 var http = require('http'),
   dotenv = require('dotenv').load(),
-  _ = require('lodash'),
   fs = require('fs');
 
 // Internal modules
 var Twitter = require('./services/twitter'),
   Router = require('./services/router'),
-  Topic = require('./models/topic'),
-  Observer = require('./services/observer'),
   Socket = require('./services/socket');
+
+// topic list for tracking tweets
+var TOPICS = [
+  'nodejs',
+  'javascript',
+  'ruby',
+  'rails',
+  'usa',
+  'canada',
+  'moltar'
+];
 
 
 /*
@@ -27,64 +35,23 @@ var config = {
  * Bootstrap server
  */
 
-var server = http.createServer(function(req, res) {
+var server = http.createServer(Router.route.bind(Router));
 
-  res.send = function(data, err, keepAlive) {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-
-    var response = formatResponse(data, err);
-
-    res.write(response);
-
-    if(!keepAlive) res.end();
-  };
-
-  // forward requests to router
-  Router.route(req, res);
-
-});
+Socket.init(server);
 
 server.listen(config.port);
-
-// create additional server for websockets
-
-// net.createServer(function(socket) {
-
-//   socket.addListener('data', function(data) {
-//     console.log('got data', data.toString());
-//   });
-
-//   var response = [
-//     'HTTP/1.1 101 WebSocket Protocol Handshake',
-//     'Upgrade: WebSocket',
-//     'Connection: Upgrade'
-//   ];
-
-
-//   // Socket.add(socket);
-
-//   // socket.write(JSON.stringify(response));
-//   // console.log('connection request', socket);
-// }).listen(9000);
-
 console.log('Server listening on port ' + config.port + '.');
-
 
 // only start twitter stream if app is started with STREAM=true
 // too many stops and starts may cause temporary service stoppage
 // this could also be handled when requests to /stream are made
 if(process.env.STREAM) {
-  var topics = Topic.all;
-
   Twitter.init()
-    .stream('statuses/filter', {track: topics})
+    .stream('statuses/filter', {track: TOPICS})
     .onData(function(data) {
-      var tweetData = parseTweetTopic(data.text, topics),
-        response = formatResponse(tweetData);
+      var tweetData = Twitter.parseTweet(data, TOPICS);
 
-      Socket.broadcast(function(socket) {
-        socket.write(response);
-      });
+      if(tweetData.topic) Socket.broadcast(tweetData);
     });
 }
 
@@ -93,70 +60,21 @@ if(process.env.STREAM) {
  * Route definitions and actions
  */
 
-Router.on('GET', '/', function(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
+// defines directory to serve static assets from
+// does not yet recursively dig through directory
+Router.static('./public');
 
-  fs.readFile('./public/index.html', function(err, data) {
-    res.write(data);
-    res.end();
-  });
-});
-
-Router.on('GET', '/stream', function(req, res) {
-
-  // consider moving to instance based sockets
-  // this would decorate the default sockets
-  // var socket = new Socket(req.socket);
-
-  Socket.add(req.socket);
-
-  req.socket.on('close', function() {
-    Socket.remove(req.socket);
-  });
-
-  req.socket.on('error', function(error) {
-    console.log('Socket got problems: ', error.message, req.socket.name);
-  });
-});
+Router.on('GET', '/', '/index.html');
 
 Router.on('GET', '/topics', function(req, res) {
-  res.send(Topic.all);
+  send(TOPICS, res);
 });
 
-Router.onUnknown(function unknown(req, res) {
-  res.send(null, 'Unknown Request');
+Router.onUnknown(function(req, res) {
+  send('Unknown URL', res);
 });
 
-
-/*
- * Helpers
- */
-
-function parseTweetTopic(text, topics) {
-  var response = {
-    topic: null,
-    text: text
-  };
-
-  _.each(topics, function(topic) {
-    if (_.contains(text.toLowerCase(), topic)) {
-      response.topic = topic;
-    }
-  });
-
-  return response;
-}
-
-function formatResponse(data, err) {
-  var response = {};
-
-  if(data) {
-    response.data = data;
-  }
-
-  if(err) {
-    response.error = err;
-  }
-
-  return JSON.stringify(response) + '\n';
+function send(data, res) {
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  res.end(JSON.stringify(data) + '\n');
 }
