@@ -1,10 +1,17 @@
 // Third party libraries
-var url = require('url');
+var url = require('url'),
+  fs = require('fs'),
+  _ = require('lodash');
 
 var Router = {
   routes: {
     GET: {},
     // POST, PUT and DELETE not currently used by app
+  },
+  _contentTypes: {
+    html: 'text/html',
+    js: 'application/javascript',
+    css: 'text/css'
   },
   default: null
 };
@@ -21,6 +28,37 @@ Router.onUnknown = function(callback) {
   this.default = callback;
 };
 
+Router.static = function(directory) {
+  var _this = this;
+
+  fs.readdir(directory, function(err, files) {
+    _.each(files, function(fileName) {
+      _this._defineStatic(directory, fileName);
+    });
+  });
+};
+
+Router._defineStatic = function(directory, fileName) {
+  var _this = this;
+
+  this.on('GET', '/' + fileName, function(req, res) {
+    var filePath = directory + '/' + fileName;
+    _this._readFileAndRespond(filePath, res);
+  });
+};
+
+Router._readFileAndRespond = function(filePath, res) {
+  var extension = _.last(filePath.split('.')),
+    contentType = this._contentTypes[extension];
+
+  res.writeHead(200, {'Content-Type': contentType});
+
+  fs.readFile(filePath, function(err, data) {
+    if(err) throw new Error('Error reading static file:', filePath);
+    res.end(data);
+  });
+};
+
 Router.route = function(req, res) {
   var method = req.method,
     methodActions = this.routes[method];
@@ -29,8 +67,8 @@ Router.route = function(req, res) {
 
   // second arg of true will parse query string to object
   var urlParts = url.parse(req.url, true),
-    pathName = urlParts.pathname,
-    action = methodActions[pathName];
+    pathname = urlParts.pathname,
+    action = methodActions[pathname];
 
   if(!action) {
 
@@ -40,6 +78,11 @@ Router.route = function(req, res) {
     // if no default is defined, throw an error
     // this may need to be handled differently in production
     if(!action) throw new Error('Unknown route.');
+  }
+
+  // if action is defined as a string, then forward request to correct route
+  if(typeof action === 'string') {
+    action = methodActions[action];
   }
 
   // add helpful parsed properties back to request
