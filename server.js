@@ -72,7 +72,8 @@ Router.on('GET', '/topics', function(req, res) {
 });
 
 Router.onUnknown(function(req, res) {
-  send('Unknown URL', res);
+  res.writeHead(404);
+  res.end('404 Page Not Found');
 });
 
 function send(data, res) {

@@ -29,27 +29,57 @@ Router.onUnknown = function(callback) {
 };
 
 Router.static = function(directory) {
-  var _this = this;
+  var files = this._getFiles(directory),
+    _this = this;
 
-  fs.readdir(directory, function(err, files) {
-    _.each(files, function(fileName) {
-      _this._defineStatic(directory, fileName);
-    });
+  console.log('Serving static files: \n', files);
+
+  _.each(files, function(fileName) {
+    _this._defineStatic(directory, fileName);
   });
 };
 
+// walk rootDirectory, finding all files
+// uses simple file regex, assuming all files have file extensions
+// to improve this logic could use: fs.stat(path, callback(err, stats)) -> stats.isDirectory()
+Router._getFiles = function(rootDirectory, nestedDir, fileList) {
+  var directory = rootDirectory,
+    _this = this;
+
+  fileList = fileList || [];
+
+  if(nestedDir) {
+    directory = rootDirectory + '/' + nestedDir;
+  }
+
+  var files = fs.readdirSync(directory);
+
+  _.each(files, function(fileName) {
+    if(nestedDir) fileName = nestedDir + '/' + fileName;
+
+    // if current item is a directory, recursively search directory
+    if(!_.contains(fileName, '.')) {
+      _this._getFiles(rootDirectory, fileName, fileList);
+
+    } else {
+      fileList.push(fileName);
+    }
+  });
+
+  return fileList;
+};
+
 Router._defineStatic = function(directory, fileName) {
-  var _this = this;
+  var filePath = directory + '/' + fileName,
+    _this = this;
 
   this.on('GET', '/' + fileName, function(req, res) {
-    var filePath = directory + '/' + fileName;
     _this._readFileAndRespond(filePath, res);
   });
 };
 
 Router._readFileAndRespond = function(filePath, res) {
-  var extension = _.last(filePath.split('.')),
-    contentType = this._contentTypes[extension];
+  var contentType = this._getContentType(filePath);
 
   res.writeHead(200, {'Content-Type': contentType});
 
@@ -57,6 +87,11 @@ Router._readFileAndRespond = function(filePath, res) {
     if(err) throw new Error('Error reading static file:', filePath);
     res.end(data);
   });
+};
+
+Router._getContentType = function(filePath) {
+  var extension = _.last(filePath.split('.'));
+  return this._contentTypes[extension];
 };
 
 Router.route = function(req, res) {
@@ -77,7 +112,7 @@ Router.route = function(req, res) {
 
     // if no default is defined, throw an error
     // this may need to be handled differently in production
-    if(!action) throw new Error('Unknown route.');
+    if(!action) throw new Error('Need to define unkown route handling.');
   }
 
   // if action is defined as a string, then forward request to correct action
