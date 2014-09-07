@@ -25,18 +25,16 @@ var config = {
  * Bootstrap server
  */
 
-// create server with middle-ware
 http.createServer(function(req, res) {
 
-  // set all responses as content-type JSON
   res.writeHead(200, {'Content-Type': 'application/json'});
 
-  // add helpful send method to response
-  res.send = function(data, err) {
+  res.send = function(data, err, keepAlive) {
     var response = formatResponse(data, err);
 
     res.write(response);
-    res.end();
+
+    if(!keepAlive) res.end();
   };
 
   // forward requests to router
@@ -47,9 +45,9 @@ http.createServer(function(req, res) {
 console.log('Server listening on port ' + config.port + '.');
 
 
-// only start stream if app is started with STREAM=true
+// only start twitter stream if app is started with STREAM=true
 // too many stops and starts may cause temporary service stoppage
-// this could also be handled when requests to /stream are made (in Twitter.track)
+// this could also be handled when requests to /stream are made
 if(process.env.STREAM) {
   var topics = Topic.all;
 
@@ -58,12 +56,12 @@ if(process.env.STREAM) {
     .onData(function(data) {
       var response = parseTweetTopic(data.text, topics);
 
-      // notify observers
-      // later this should use sockets
-      // and notify on a topic by topic basis
-      Observer.notify('tweet', response);
+      // notify observers - later this should use sockets
+      // consider notifying on a topic-by-topic basis
+      if(response.topic) {
+        Observer.notify('tweet', response);
+      }
     });
-
 }
 
 
@@ -77,15 +75,14 @@ Router.on('GET', '/', function(req, res) {
 
 Router.on('GET', '/stream', function(req, res) {
 
-  // parse req.query and subscribe client to topics
+  // TODO: parse req.query and subscribe client to topics
 
   Observer.register('tweet', function(data) {
     // data => {topic: 'topic-name', text: 'tweet-text'}
 
     // console.log(data);
-    var response = formatResponse(data);
 
-    res.write(response);
+    res.send(data, null, true);
   });
 
 });

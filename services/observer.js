@@ -1,9 +1,9 @@
+// Third party libraries
 var _ = require('lodash');
 
 var Observer = {
   events: {}
 };
-
 
 Observer.register = function(event, callback) {
   if(!this.eventExists(event)) {
@@ -14,14 +14,13 @@ Observer.register = function(event, callback) {
 };
 
 Observer.eventExists = function(event) {
-  // shortcut to coerce boolean
+
   // empty strings or any falsey values are not allowed as event names
   return !!this.events[event];
 };
 
 Observer._registerEvent =  function(event) {
   if(!event) throw new Error('Illegal event name.');
-
 
   if(this.eventExists(event)) throw new Error('Event already registered.');
 
@@ -31,6 +30,7 @@ Observer._registerEvent =  function(event) {
 Observer.notify = function(event, data) {
   var eventCallbacks = this.events[event];
 
+  // helpful for development
   this._logEvent(event);
 
   _.each(eventCallbacks, function(callback) {
@@ -39,10 +39,8 @@ Observer.notify = function(event, data) {
 };
 
 Observer._logEvent = function(event) {
-  var eventCallbacks = this.events[event];
-
-  // helpful for development
-  var subscriberCount = eventCallbacks ? eventCallbacks.length : 0;
+  var eventCallbacks = this.events[event],
+    subscriberCount = eventCallbacks ? eventCallbacks.length : 0;
 
   console.log('Event: ' + event + ' - Subscribers: ' + subscriberCount);
 };

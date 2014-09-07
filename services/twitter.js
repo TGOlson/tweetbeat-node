@@ -3,8 +3,7 @@ var TwitterClient = require('twitter');
 
 var Twitter = {
   _client: null,
-  _stream: null,
-  _callbacks: []
+  _stream: null
 };
 
 Twitter.init = function() {
@@ -33,10 +32,6 @@ Twitter.stream = function(type, options) {
 };
 
 
-Twitter.track = function(topics, callback) {
-  // implement listening for specific topics here
-};
-
 Twitter.onData = function(callback) {
   if(!this._stream) throw new Error('Twitter stream not initialized.');
 
@@ -49,7 +44,9 @@ Twitter.onData = function(callback) {
 
 Twitter.destroyStream = function() {
   if(!this._stream) throw new Error('Stream not initialized.');
+
   this._stream.destroy();
+  this._stream = null;
 };
 
 module.exports = Twitter;
