@@ -42,7 +42,9 @@ To start the app with the Twitter stream initialized, set `STREAM=true`. This al
 STREAM=true node server.js
 ````
 
-Test connecting to the stream from the command line. This will default to subscribing to all topics.
+Navigate over to `localhost:8080`, open the console, and you should see tweet topics being logged.
+
+Subscribe to stream. [feature temporarily removed]
 ```
 curl localhost:8080/stream
 ````
@@ -58,7 +60,6 @@ curl localhost:8080/topics
 ````
 
 ## TODO
-
-* Test with `var connection = new WebSocket('ws://localhost:8080/stream');`
-* Create client-side app - look into react.
-* Look into public file routing (probably using `Router` to compile list of public files and build routes).
+* Allow client to subscribe to specific topics - right now all clients get all tweet events
+* Port over tweetbeat client and polyfill with events.
+* Redo client-side app - look into react.
