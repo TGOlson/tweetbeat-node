@@ -1,8 +1,6 @@
 // Third party libraries
 var http = require('http'),
-  dotenv = require('dotenv');
-
-dotenv.load();
+  dotenv = require('dotenv').load();
 
 // Internal modules
 var Twitter = require('./services/twitter').init(),
@@ -14,6 +12,8 @@ var Twitter = require('./services/twitter').init(),
  * Configuration settings
  */
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 var config = {
   port: process.env.port || 8080
 };
@@ -23,23 +23,26 @@ var config = {
  * Bootstrap server
  */
 
-// load environment variables
+// create server with middle-ware
+var server = http.createServer(function(req, res) {
 
-// set default request behavior
-function onRequest(req, res) {
-  console.log('Request recieved: ', req.url, req.params);
-  console.log('Forwarding request to router.');
+  res.send = function(data, err) {
+    var response = formatResponse(data, err);
 
-  Router.forward(req, res);
-}
+    // assume all responses are JSON
+    res.writeHead(200, {'Content-Type': 'application/json'});
 
-// create server
-var server = http.createServer(onRequest);
+    res.write(response);
+    res.end();
+  };
+
+  // forward requests to router
+  Router.route(req, res);
+});
 
 // listen to current port
 server.listen(config.port);
 
-// notify
 console.log('Server listening on port ' + config.port + '.');
 
 // only start stream if app is started with STREAM=true
@@ -51,28 +54,14 @@ if(process.env.STREAM) {
 
 
 /*
- * Route definitions
+ * Route definitions and actions
  */
 
-Router
-  .get('/', index)
-  .get('/stream', stream)
-  .get('/topics', topics)
-  .onUnknown(unknown);
+Router.on('GET', '/', function(req, res) {
+  res.send('You are in the index, that is cool.');
+});
 
-
-/*
- * Actions
- */
-
- function index(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('You are in the index, that is cool.');
-  res.write('\n');
-  res.end();
- }
-
-function stream(req, res) {
+Router.on('GET', '/stream', function(req, res) {
   var topics = req.query.topics;
 
   if(topics) {
@@ -96,18 +85,31 @@ function stream(req, res) {
   //   res.end();
   // }, 5000);
   // res.end();
-}
+});
 
-function topics(req, res) {
-  res.writeHead(200, {'Content-Type': 'application/json'});
-  res.write(JSON.stringify(Topic.all));
-  res.write('\n');
-  res.end();
-}
+Router.on('GET', '/topics', function(req, res) {
+  res.send(Topic.all);
+});
 
-function unknown(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('Unknown request path.');
-  res.write('\n');
-  res.end();
+Router.onUnknown(function unknown(req, res) {
+  res.send(null, 'Unknown Request');
+});
+
+
+/*
+ * Helpers
+ */
+
+function formatResponse(data, err) {
+  var response = {};
+
+  if(data) {
+    response.data = data;
+  }
+
+  if(err) {
+    response.error = err;
+  }
+
+  return JSON.stringify(response) + '\n';
 }
