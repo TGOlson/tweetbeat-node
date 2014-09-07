@@ -80,12 +80,12 @@ Router.route = function(req, res) {
     if(!action) throw new Error('Unknown route.');
   }
 
-  // if action is defined as a string, then forward request to correct route
+  // if action is defined as a string, then forward request to correct action
   if(typeof action === 'string') {
     action = methodActions[action];
   }
 
-  // add helpful parsed properties back to request
+  // add helpful parsed properties to request
   req.query = urlParts.query;
 
   action(req, res);

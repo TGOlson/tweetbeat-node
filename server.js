@@ -1,7 +1,6 @@
 // Third party libraries
 var http = require('http'),
-  dotenv = require('dotenv').load(),
-  fs = require('fs');
+  dotenv = require('dotenv').load();
 
 // Internal modules
 var Twitter = require('./services/twitter'),
@@ -40,18 +39,20 @@ var server = http.createServer(Router.route.bind(Router));
 Socket.init(server);
 
 server.listen(config.port);
-console.log('Server listening on port ' + config.port + '.');
+console.log('Server listening on port ' + config.port);
 
 // only start twitter stream if app is started with STREAM=true
 // too many stops and starts may cause temporary service stoppage
-// this could also be handled when requests to /stream are made
+// this could also be handled when socket connections are made
 if(process.env.STREAM) {
   Twitter.init()
     .stream('statuses/filter', {track: TOPICS})
     .onData(function(data) {
-      var tweetData = Twitter.parseTweet(data, TOPICS);
+      var tweetData = Twitter.formatData(data, TOPICS);
 
-      if(tweetData.topic) Socket.broadcast(tweetData);
+      // should check to see if topic is defined before broadcasting
+      // this could also be handled be only broadcasting to subscribed parties
+      Socket.broadcast(tweetData);
     });
 }
 

@@ -44,13 +44,15 @@ Twitter.onData = function(callback) {
 };
 
 Twitter.destroyStream = function() {
-  if(!this._stream) throw new Error('Stream not initialized.');
+  if(!this._stream) throw new Error('Twitter stream not initialized.');
 
   this._stream.destroy();
   this._stream = null;
 };
 
-Twitter.parseTweet = function(data, topics) {
+// takes in a tweet objects and a list of possible topics it could match
+// returns a json formatted response => {topic: ..., text: ...}
+Twitter.formatData = function(data, topics) {
   var text = data.text;
 
   var response = {
@@ -64,7 +66,7 @@ Twitter.parseTweet = function(data, topics) {
     }
   });
 
-  return response;
+  return JSON.stringify(response) + '\n';
 };
 
 module.exports = Twitter;

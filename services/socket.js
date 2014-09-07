@@ -30,20 +30,21 @@ Socket._setListeners = function(socketServer) {
 // add and remove does not do anything functional - they just log data
 Socket._addSocket = function() {
   this._socketCount++;
-  console.log("Websocket connection open");
+  console.log("Websocket connection opened");
   console.log('Current sockets: ' + this._socketCount);
 };
 
 Socket._removeSocket = function() {
-  console.log("Websocket connection close");
-  console.log('Current sockets: ' + this._socketCount);
   this._socketCount--;
+  console.log("Websocket connection closed");
+  console.log('Current sockets: ' + this._socketCount);
 };
 
 Socket.broadcast = function(data) {
-  _.each(this._socketServer.clients, function(socket) {
-    var formattedData = JSON.stringify(data) + '\n';
-    socket.send(formattedData);
+  var clients = this._socketServer.clients;
+
+  _.each(clients, function(socket) {
+    socket.send(data);
   });
 };
 

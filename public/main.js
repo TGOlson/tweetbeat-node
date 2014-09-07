@@ -1,8 +1,9 @@
 $(function() {
 
-  var host = location.origin.replace('http', 'ws');
+  console.log('Hi there');
 
-  var socket = new WebSocket(host);
+  var host = location.origin.replace('http', 'ws'),
+    socket = new WebSocket(host);
 
   socket.onmessage = function(event) {
     var data = JSON.parse(event.data);
