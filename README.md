@@ -14,10 +14,14 @@ Helpers:
 
 ## Setup
 
+The root node app is available to serve assets, return API responses, and make websocket connections. The nested rails app `/assets` is mainly acting as a polyfill for serving the original tweetbeat assets, and making requests to the node application. 
+
+First start the node app.
+
 Install dependencies
 
 ```
-npm install
+$ npm install
 ```
 
 Create a `.env` file with valid credentials
@@ -29,11 +33,42 @@ TWITTER_ACCESS_TOKEN_KEY=your-twitter-access-token-key
 TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
 ```
 
-Run the app
+Run the app with `STREAM=true`
 
 ```
-node server.js
+$ STREAM=true node server.js
 ```
+
+Then start the rails app
+
+```
+$ bundle install
+```
+
+```
+$ cd assets/
+```
+
+
+Create a `.env` file with valid credentials
+
+```
+SECRET_KEY:your-rails-secret
+```
+
+Run the app
+```
+$ rails s
+```
+
+Navigate to `localhost:3000` to see the app running. In the console you should see a new connection
+
+```
+Websocket connection opened
+Current sockets: 1
+```
+
+Effectively, the rails app is serving original tweetbeat assets, which communicates with the node server via websockets. This probably won't work in production, but acts as a polyfill solution until the assets are ported over to the node app. Note: this solution is converting websocket responses to JS events, and has some bugs.
 
 ## Development
 
@@ -61,5 +96,5 @@ curl localhost:8080/topics
 
 ## TODO
 * Allow client to subscribe to specific topics - right now all clients get all tweet events
-* Port over tweetbeat client and polyfill with events.
+* Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.

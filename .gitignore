@@ -6,8 +6,8 @@ npm-debug.log
 
 # For tweetbeat-assets.
 
-tweetbeat-assets/.bundle
-tweetbeat-assets/log/*.log
-tweetbeat-assets/tmp
-tweetbeat-assets/.env
-tweetbeat-assets/.DS_Store
+assets/.bundle
+assets/log/*.log
+assets/tmp/*
+assets/.env
+assets/.DS_Store
