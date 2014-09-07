@@ -17,7 +17,6 @@ Router.on = function(method, route, callback) {
   methodActions[route] = callback;
 };
 
-
 Router.onUnknown = function(callback) {
   this.default = callback;
 };

@@ -53,4 +53,5 @@ curl localhost:8080/topics
 ````
 
 ## TODO
-* Integrate web sockets - right now there is a huge memory leak with callbacks pilling up
+
+* Integrate web sockets - right now there is a huge memory leak with callbacks pilling up. This is fine for development, but in production would cause tons of unnecessary function calls.

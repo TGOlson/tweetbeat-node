@@ -1,11 +1,13 @@
 // Third party libraries
 var http = require('http'),
-  dotenv = require('dotenv').load();
+  dotenv = require('dotenv').load(),
+  _ = require('lodash');
 
 // Internal modules
-var Twitter = require('./services/twitter').init(),
+var Twitter = require('./services/twitter'),
   Router = require('./services/router'),
-  Topic = require('./models/topic');
+  Topic = require('./models/topic'),
+  Observer = require('./services/observer');
 
 
 /*
@@ -24,13 +26,13 @@ var config = {
  */
 
 // create server with middle-ware
-var server = http.createServer(function(req, res) {
+http.createServer(function(req, res) {
+
+  // set all responses are JSON
+  res.writeHead(200, {'Content-Type': 'application/json'});
 
   res.send = function(data, err) {
     var response = formatResponse(data, err);
-
-    // assume all responses are JSON
-    res.writeHead(200, {'Content-Type': 'application/json'});
 
     res.write(response);
     res.end();
@@ -38,18 +40,29 @@ var server = http.createServer(function(req, res) {
 
   // forward requests to router
   Router.route(req, res);
-});
 
-// listen to current port
-server.listen(config.port);
+}).listen(config.port);
 
 console.log('Server listening on port ' + config.port + '.');
+
 
 // only start stream if app is started with STREAM=true
 // too many stops and starts may cause temporary service stoppage
 // this could also be handled when requests to /stream are made (in Twitter.track)
 if(process.env.STREAM) {
-  Twitter.startStream('statuses/filter', {track: Topic.all});
+  var topics = Topic.all;
+
+  Twitter.init()
+    .stream('statuses/filter', {track: topics})
+    .onData(function(data) {
+      var response = parseTweetTopic(data.text, topics);
+
+      // notify observers
+      // later this should use sockets
+      // and notify on a topic by topic basis
+      Observer.notify('tweet', response);
+    });
+
 }
 
 
@@ -62,29 +75,18 @@ Router.on('GET', '/', function(req, res) {
 });
 
 Router.on('GET', '/stream', function(req, res) {
-  var topics = req.query.topics;
 
-  if(topics) {
-    topics = topics.split(',');
-  } else {
-    topics = Topic.all;
-  }
+  // parse req.query and subscribe client to topics
 
-  res.writeHead(200, {'Content-Type': 'application/json'});
+  Observer.register('tweet', function(data) {
+    // data => {topic: 'topic-name', text: 'tweet-text'}
 
-  Twitter.track(topics, function(data) {
-    // {topic: 'topic-name', text: 'tweet-text'}
     // console.log(data);
-    res.write(JSON.stringify(data));
-    res.write('\n');
+    var response = formatResponse(data);
+
+    res.write(response);
   });
 
-  // kill stream after 2 seconds
-  // setTimeout(Twitter.destroyStream.bind(Twitter), 2000);
-  // setInterval(function() {
-  //   res.end();
-  // }, 5000);
-  // res.end();
 });
 
 Router.on('GET', '/topics', function(req, res) {
@@ -99,6 +101,21 @@ Router.onUnknown(function unknown(req, res) {
 /*
  * Helpers
  */
+
+function parseTweetTopic(text, topics) {
+  var response = {
+    topic: null,
+    text: text
+  };
+
+  _.each(topics, function(topic) {
+    if (_.contains(text.toLowerCase(), topic)) {
+      response.topic = topic;
+    }
+  });
+
+  return response;
+}
 
 function formatResponse(data, err) {
   var response = {};

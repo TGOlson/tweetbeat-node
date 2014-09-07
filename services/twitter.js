@@ -1,17 +1,16 @@
 // Third party libraries
-var TwitterClient = require('twitter'),
-  _ = require('lodash');
+var TwitterClient = require('twitter');
 
 var Twitter = {
-  client: null,
-  stream: null,
-  callbacks: []
+  _client: null,
+  _stream: null,
+  _callbacks: []
 };
 
 Twitter.init = function() {
-  if(this.client) throw new Error('Twitter client already initialized.');
+  if(this._client) throw new Error('Twitter client already initialized.');
 
-  this.client = new TwitterClient({
+  this._client = new TwitterClient({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
     access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
@@ -21,53 +20,36 @@ Twitter.init = function() {
   return this;
 };
 
-Twitter.startStream = function(type, options, callback) {
-  if(this.stream) throw new Error('Twitter stream already initialized.');
+Twitter.stream = function(type, options) {
+  if(this._stream) throw new Error('Twitter stream already initialized.');
 
   var _this = this;
 
-  this.client.stream(type, options, function(stream) {
-    _this.stream = stream;
-    if(callback) callback(stream);
+  this._client.stream(type, options, function(stream) {
+    _this._stream = stream;
   });
 
   return this;
 };
+
 
 Twitter.track = function(topics, callback) {
-  if(!this.stream) throw new Error('Twitter stream not initialized.');
+  // implement listening for specific topics here
+};
 
-  this.stream.on('data', function(data) {
-    console.log('tracking', topics);
+Twitter.onData = function(callback) {
+  if(!this._stream) throw new Error('Twitter stream not initialized.');
 
-    var response = formatResponse(topics, data.text);
-
-    // invoke callback if tweet contains topic client is looking for
-    if(response.topic) callback(response);
+  this._stream.on('data', function(data) {
+    callback(data);
   });
 
   return this;
 };
 
-function formatResponse(topics, text) {
-  var response = {
-    topic: null,
-    text: text
-  };
-
-  _.each(topics, function(topic) {
-    if (_.contains(text.toLowerCase(), topic)) {
-      response.topic = topic;
-    }
-  });
-
-  return response;
-}
-
 Twitter.destroyStream = function() {
-  if(!this.stream) throw new Error('Stream not initialized.');
-  this.stream.destroy();
+  if(!this._stream) throw new Error('Stream not initialized.');
+  this._stream.destroy();
 };
-
 
 module.exports = Twitter;
