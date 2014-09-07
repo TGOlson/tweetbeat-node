@@ -8,6 +8,9 @@ Helpers:
 * [node/twitter/socket/react](http://javaguirre.net/2014/02/11/twitter-streaming-api-with-node-socket-io-and-reactjs/)
 * [pure websockets](https://gist.github.com/bradleywright/1021082)
 * [websockets definitions](http://en.wikipedia.org/wiki/WebSocket)
+* [node-ws module](https://github.com/einaros/ws)
+* [using node-ws module](https://github.com/heroku-examples/node-ws-test)
+* [websockets on heroku](https://devcenter.heroku.com/articles/websockets)
 
 ## Setup
 
@@ -56,7 +59,6 @@ curl localhost:8080/topics
 
 ## TODO
 
-* Finish web-socket handshake process - websockets are currently being used to write to clients, but not in an officially supported format.
-* Test with `var connection = new WebSocket('ws://localhost:8080/topics')`
+* Test with `var connection = new WebSocket('ws://localhost:8080/stream');`
 * Create client-side app - look into react.
 * Look into public file routing (probably using `Router` to compile list of public files and build routes).
