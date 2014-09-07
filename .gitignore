@@ -1,11 +1,8 @@
 node_modules
 npm-debug.log
-
 .env
 
-
-# For tweetbeat-assets.
-
+# Tweetbeat assets.
 assets/.bundle
 assets/log/*.log
 assets/tmp/*
