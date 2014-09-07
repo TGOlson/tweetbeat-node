@@ -1,7 +1,8 @@
 // Third party libraries
 var http = require('http'),
   dotenv = require('dotenv').load(),
-  _ = require('lodash');
+  _ = require('lodash'),
+  fs = require('fs');
 
 // Internal modules
 var Twitter = require('./services/twitter'),
@@ -28,9 +29,9 @@ var config = {
 
 var server = http.createServer(function(req, res) {
 
-  res.writeHead(200, {'Content-Type': 'application/json'});
-
   res.send = function(data, err, keepAlive) {
+    res.writeHead(200, {'Content-Type': 'application/json'});
+
     var response = formatResponse(data, err);
 
     res.write(response);
@@ -44,6 +45,27 @@ var server = http.createServer(function(req, res) {
 });
 
 server.listen(config.port);
+
+// create additional server for websockets
+
+// net.createServer(function(socket) {
+
+//   socket.addListener('data', function(data) {
+//     console.log('got data', data.toString());
+//   });
+
+//   var response = [
+//     'HTTP/1.1 101 WebSocket Protocol Handshake',
+//     'Upgrade: WebSocket',
+//     'Connection: Upgrade'
+//   ];
+
+
+//   // Socket.add(socket);
+
+//   // socket.write(JSON.stringify(response));
+//   // console.log('connection request', socket);
+// }).listen(9000);
 
 console.log('Server listening on port ' + config.port + '.');
 
@@ -72,7 +94,12 @@ if(process.env.STREAM) {
  */
 
 Router.on('GET', '/', function(req, res) {
-  res.send('You are in the index, that is cool.');
+  res.writeHead(200, {'Content-Type': 'text/html'});
+
+  fs.readFile('./public/index.html', function(err, data) {
+    res.write(data);
+    res.end();
+  });
 });
 
 Router.on('GET', '/stream', function(req, res) {

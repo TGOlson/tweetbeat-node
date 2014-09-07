@@ -7,6 +7,7 @@ Helpers:
 * [node/twitter/socket](http://dillonbuchanan.com/programming/node-js-twitter-streaming-api-socket-io-twitter-cashtag-heatmap/)
 * [node/twitter/socket/react](http://javaguirre.net/2014/02/11/twitter-streaming-api-with-node-socket-io-and-reactjs/)
 * [pure websockets](https://gist.github.com/bradleywright/1021082)
+* [websockets definitions](http://en.wikipedia.org/wiki/WebSocket)
 
 ## Setup
 
@@ -55,4 +56,7 @@ curl localhost:8080/topics
 
 ## TODO
 
-* Integrate web sockets - right now there is a huge memory leak with callbacks pilling up. This is fine for development, but in production would cause tons of unnecessary function calls.
+* Finish web-socket handshake process - websockets are currently being used to write to clients, but not in an officially supported format.
+* Test with `var connection = new WebSocket('ws://localhost:8080/topics')`
+* Create client-side app - look into react.
+* Look into public file routing (probably using `Router` to compile list of public files and build routes).
