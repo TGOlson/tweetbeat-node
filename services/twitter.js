@@ -57,11 +57,13 @@ Twitter.formatData = function(data, topics) {
 
   var response = {
     topic: null,
+    topicId: null,
     text: text
   };
 
-  _.each(topics, function(topic) {
-    if (_.contains(text.toLowerCase(), topic)) {
+  _.each(topics, function(topic, index) {
+    if (_.contains(text.toLowerCase(), topic.toLowerCase())) {
+      response.topicId = index;
       response.topic = topic;
     }
   });

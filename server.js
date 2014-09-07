@@ -8,14 +8,35 @@ var Twitter = require('./services/twitter'),
   Socket = require('./services/socket');
 
 // topic list for tracking tweets
+// use shorter list for development
+// this needs to match list in tweets_controller
 var TOPICS = [
-  'nodejs',
-  'javascript',
-  'ruby',
-  'rails',
-  'usa',
-  'canada',
-  'moltar'
+  // "Coffee",
+  // "Tea",
+  // "DBCsleeps",
+  "Canada",
+  "USA",
+  // "California",
+  "Tesla",
+  // "Spring",
+  // "Summer",
+  // "Autumn",
+  // "Winter",
+  // "Santa",
+  // "Snowman",
+  "Moltar",
+  // "Hurricane",
+  // "Tornado",
+  // "Earthquake",
+  // "Tsunami",
+  // "Blizzard",
+  // "Godzilla",
+  "King Kong",
+  // "John Lennon",
+  // "Voltar",
+  // "Tapioca",
+  // "Star Wars",
+  // "Xolov"
 ];
 
 
@@ -49,6 +70,7 @@ if(process.env.STREAM) {
     .stream('statuses/filter', {track: TOPICS})
     .onData(function(data) {
       var tweetData = Twitter.formatData(data, TOPICS);
+
 
       // should check to see if topic is defined before broadcasting
       // this could also be handled be only broadcasting to subscribed parties

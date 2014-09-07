@@ -7,7 +7,7 @@ $(function() {
 
   socket.onmessage = function(event) {
     var data = JSON.parse(event.data);
-    console.log(data.topic);
+    console.log('Tweet event received: ', data.topic);
   };
 
 });
