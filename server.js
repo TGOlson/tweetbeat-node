@@ -7,7 +7,8 @@ var http = require('http'),
 var Twitter = require('./services/twitter'),
   Router = require('./services/router'),
   Topic = require('./models/topic'),
-  Observer = require('./services/observer');
+  Observer = require('./services/observer'),
+  Socket = require('./services/socket');
 
 
 /*
@@ -25,7 +26,7 @@ var config = {
  * Bootstrap server
  */
 
-http.createServer(function(req, res) {
+var server = http.createServer(function(req, res) {
 
   res.writeHead(200, {'Content-Type': 'application/json'});
 
@@ -40,7 +41,9 @@ http.createServer(function(req, res) {
   // forward requests to router
   Router.route(req, res);
 
-}).listen(config.port);
+});
+
+server.listen(config.port);
 
 console.log('Server listening on port ' + config.port + '.');
 
@@ -54,13 +57,12 @@ if(process.env.STREAM) {
   Twitter.init()
     .stream('statuses/filter', {track: topics})
     .onData(function(data) {
-      var response = parseTweetTopic(data.text, topics);
+      var tweetData = parseTweetTopic(data.text, topics),
+        response = formatResponse(tweetData);
 
-      // notify observers - later this should use sockets
-      // consider notifying on a topic-by-topic basis
-      if(response.topic) {
-        Observer.notify('tweet', response);
-      }
+      Socket.broadcast(function(socket) {
+        socket.write(response);
+      });
     });
 }
 
@@ -75,16 +77,19 @@ Router.on('GET', '/', function(req, res) {
 
 Router.on('GET', '/stream', function(req, res) {
 
-  // TODO: parse req.query and subscribe client to topics
+  // consider moving to instance based sockets
+  // this would decorate the default sockets
+  // var socket = new Socket(req.socket);
 
-  Observer.register('tweet', function(data) {
-    // data => {topic: 'topic-name', text: 'tweet-text'}
+  Socket.add(req.socket);
 
-    // console.log(data);
-
-    res.send(data, null, true);
+  req.socket.on('close', function() {
+    Socket.remove(req.socket);
   });
 
+  req.socket.on('error', function(error) {
+    console.log('Socket got problems: ', error.message, req.socket.name);
+  });
 });
 
 Router.on('GET', '/topics', function(req, res) {

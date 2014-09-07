@@ -31,7 +31,7 @@ Observer.notify = function(event, data) {
   var eventCallbacks = this.events[event];
 
   // helpful for development
-  this._logEvent(event);
+  if(process.env.DEBUG) this._logEvent(event);
 
   _.each(eventCallbacks, function(callback) {
     callback(data);
