@@ -33,7 +33,7 @@ TWITTER_ACCESS_TOKEN_KEY=your-twitter-access-token-key
 TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
 ```
 
-Run the app with `STREAM=true`
+Run the node app with `STREAM=true`
 
 ```
 $ STREAM=true node server.js
@@ -42,21 +42,17 @@ $ STREAM=true node server.js
 Then start the rails app
 
 ```
+$ cd assets/
 $ bundle install
 ```
 
-```
-$ cd assets/
-```
-
-
-Create a `.env` file with valid credentials
+Create a `/assets/.env` file with valid credentials
 
 ```
 SECRET_KEY:your-rails-secret
 ```
 
-Run the app
+Run the rails app
 ```
 $ rails s
 ```
@@ -95,6 +91,8 @@ curl localhost:8080/topics
 ````
 
 ## TODO
+* Implement gulp to serve assets
+* Create run command to start both apps
 * Allow client to subscribe to specific topics - right now all clients get all tweet events
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
