@@ -28,9 +28,10 @@ var config = {
 // create server with middle-ware
 http.createServer(function(req, res) {
 
-  // set all responses are JSON
+  // set all responses as content-type JSON
   res.writeHead(200, {'Content-Type': 'application/json'});
 
+  // add helpful send method to response
   res.send = function(data, err) {
     var response = formatResponse(data, err);
 

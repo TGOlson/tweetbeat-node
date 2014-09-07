@@ -42,7 +42,7 @@ Test connecting to the stream from the command line. This will default to subscr
 curl localhost:8080/stream
 ````
 
-Subscribe to specific topics.
+Subscribe to specific topics. [feature temporarily removed]
 ```
 curl localhost:8080/stream?topics=usa,ruby
 ````
