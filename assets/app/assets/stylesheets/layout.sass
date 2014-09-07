@@ -1,0 +1,357 @@
+@font-face
+  font-family: digital
+  src: url('/fonts/DS-DIGI.TTF')
+
+$light-grey: #eee
+$dark-grey: #222
+$red: #e74c3c
+$dark-red: #c0392b
+
+=margin-reset
+  margin: 0px
+  padding: 0px
+
+=inline-list
+  display: inline-block
+  list-style: none
+
+body
+  +margin-reset
+  background-color: #eee
+  font-family: Electrolize
+
+body.visual
+  background-color: $dark-grey
+
+  .synth
+    display: none
+
+.hidden
+  display: none
+
+.topic
+  margin: 4px
+  border-radius: 4px
+  background-color: rgba(127, 140, 141,.5)
+  text-align: center
+  z-index: 99
+  cursor: move
+  font-size: 16px
+  color: #fff
+  width: 160px
+
+.topic:hover
+  background-color: rgba(170, 170, 170,.5)
+
+.slide_toggle
+  position: absolute
+  right: 15px
+  top: 15px
+  width: 50px
+  height: 25px
+  background-color: #eee
+  padding: 0 3px
+  border-radius: 99px
+  border: 2px solid #ccc
+  color: #999
+  font-size: 13px
+
+  #circle_toggle
+    position: absolute
+    left: 0
+    top: 0
+    background-color: #999
+    border-radius: 99px
+    width: 25px
+    height: 25px
+    z-index: 97
+
+  #toggle_icon
+    position: absolute
+    left: 30px
+    top: 3px
+    font-size: 22px
+    color: #bbb
+
+#fullnav
+  background-color: #e74c3c
+
+  ul
+    +margin-reset
+
+    li
+      +inline-list
+
+    #nav_title
+      margin: 15px 10px 5px 10px
+
+      a
+        color: #fff
+
+.synth
+  width: 1240px
+  margin: 20px auto 100px auto
+  position: relative
+
+#topics_container
+  top: -2px
+  background-color: #eee
+  padding: 5px 0
+  position: absolute
+  margin: 20px 0 0 0
+
+  #topics_list
+    width: 80%
+    margin: 0 0 0 10%
+    padding: 5px 0
+
+    .topic
+      list-style: none
+      padding: 8px 0
+      position: relative
+
+#top-line
+  position: absolute
+  height: 10px
+  background-color: #1abc9c
+  border: 0 none
+  width: 670px
+  left: 25px
+  top: 55px
+
+#moltar
+  +margin-reset
+  position: absolute
+  top: 15px
+  right: 35px
+  font-size: 55px
+  color: darken(#c0392b, 20%)
+  text-shadow: 0 1px 1px lighten(#c0392b, 50%)
+
+#synth_container
+  top: 5px
+  width: 720px
+  height: 520px
+  margin: 50px auto 0
+  padding-top: 80px
+  position: relative
+  background: #e74c3c
+  border-right: 30px solid #c0392b
+  border-left: 30px solid #c0392b
+
+  #synth_pads
+    position: absolute
+    width: 500px
+    padding: 10px
+    border-right: 2px solid #1abc9c
+
+    ul
+      +margin-reset
+
+      .drop_hover
+        background-color: lighten(#eee, 10%)
+
+      .pad_hit
+        color: #e74c3c
+        background-color: #ddd
+        border-bottom: 10px solid #777
+
+      li
+        +inline-list
+        margin: 15px
+        width: 110px
+        height: 110px
+        background-color: #eee
+        border: 10px solid #bdc3c7
+        border-bottom: 10px solid #95a5a6
+        position: relative
+        color: #ddd
+
+        .drop_area
+          position: absolute
+          top: 20px
+          text-align: center
+          line-height: 32px
+          font-size: 18px
+          cursor: move
+
+        .keyword_dropped
+          width: 110px
+          z-index: 98
+
+          .close
+            float: left
+            margin-left: 7px
+
+        .letter_display
+          position: absolute
+          font-size: 150%
+          top: 5%
+          left: 10%
+          color: #ddd
+
+        #synthname
+          font-family: Electrolize
+          color: #ccc
+          position: absolute
+          font-size: 12px
+          bottom: 0
+          left: 3px
+
+  #synth_controls
+    position: absolute
+    top: 100px
+    right: 20px
+
+    #slider-vertical
+      height: 150px
+      width: 12px
+      margin: 50px auto 0 auto
+
+    #xy
+      cursor: url("/images/glow2.png"), auto
+      margin-top: 30px
+      height: 150px
+      width: 150px
+      border: 7px  solid #5c5c5c
+      border-radius: 10px
+      background: url("/images/xybackground.png")
+      background-size: contain
+
+    .filter-toggle
+      position: absolute
+      left: 54px
+      bottom: -30px
+      border-radius: 5px
+      border: 1px solid #5c5c5c
+      background: #adadad
+      font-family: Electrolize
+      color: rgba(15, 08, 15, .6)
+
+    .filter-on
+      background: rgba(254,65,65,.8)
+
+#about_section
+  position: fixed
+  text-align: right
+  right: 20px
+  bottom: 15px
+  font-family: 'Rochester', cursive
+  font-size: 80px
+  color: #ccc
+  +margin-reset
+  width: 280px
+
+  p
+    +margin-reset
+
+.ui-effects-transfer
+  border: 2px dotted $dark-grey
+
+
+
+.filter-toggle:focus
+  outline: none
+
+.filter-on
+  background: rgba(254,65,65,.8)
+
+.directional-button
+  height: 0
+  width: 0
+  position: absolute
+  left: 70px
+  border-left: transparent solid 30px
+  border-right: transparent solid 30px
+  margin: 20px 0 0 0
+
+#up-button
+  top: -46px
+  border-bottom: #34495e solid 30px
+
+#up-button:hover
+  border-bottom: #1abc9c solid 30px
+
+#down-button
+  top: 580px
+  border-top: #34495e solid 30px
+
+#down-button:hover
+  border-top: #1abc9c solid 30px
+
+#library-container
+  position: relative
+  margin: 0 auto
+
+#prev
+  background: url("/images/prev.png")
+  background-size: contain
+  position: absolute
+  left: 50px
+  width: 20px
+  height: 20px
+  cursor: pointer
+
+#prev:hover
+  background: url("/images/prev-hover.png")
+  background-size: contain
+
+#next
+  background: url("/images/next.png")
+  background-size: contain
+  position: absolute
+  right: 50px
+  width: 20px
+  height: 20px
+  cursor: pointer
+
+#next:hover
+  background: url("/images/next-hover.png")
+  background-size: contain
+
+
+
+
+#library
+  margin: 0 auto
+  font-family: digital
+  background: rgba(72,171,92,.2)
+  border: 3px  solid #5c5c5c
+  width: 130px
+
+  ul
+    text-align: center
+    padding: 0
+    margin: 7.5px
+
+  li
+    font-size: 25px
+    margin: 0 auto
+    list-style-type: none
+    display: none
+    text-align: left
+
+  .current-lib
+    display: inline
+
+.deletion-field
+  background: #d14536
+  width: 20%
+  height: 50px
+  top: 25px
+  margin-bottom: 5px
+  position: relative
+  text-align: center
+  left: 40%
+  color: white
+  line-height: 50px
+  border-radius: 5px
+  cursor: default
+  opacity: 0
+
+.deletion-hover
+  background-color: lighten(#d14536, 10%)
+
+.deletion-active
+  opacity: 1
+

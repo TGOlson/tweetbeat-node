@@ -2,3 +2,12 @@ node_modules
 npm-debug.log
 
 .env
+
+
+# For tweetbeat-assets.
+
+tweetbeat-assets/.bundle
+tweetbeat-assets/log/*.log
+tweetbeat-assets/tmp
+tweetbeat-assets/.env
+tweetbeat-assets/.DS_Store
