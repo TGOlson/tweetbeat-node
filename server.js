@@ -1,11 +1,13 @@
 // Third party libraries
 var http = require('http'),
-  dotenv = require('dotenv').load();
+  dotenv = require('dotenv').load(),
+  crypto = require('crypto');
 
 // Internal modules
 var Twitter = require('./services/twitter'),
   Router = require('./services/router'),
-  Socket = require('./services/socket');
+  Socket = require('./services/socket'),
+  EventHub = require('./services/event-hub');
 
 // topic list for tracking tweets
 // use shorter list for development
@@ -57,26 +59,18 @@ var config = {
 
 var server = http.createServer(Router.route.bind(Router));
 
-Socket.init(server);
-
 server.listen(config.port);
 console.log('Server listening on port ' + config.port);
 
+Socket.init(server);
+
 // only start twitter stream if app is started with STREAM=true
 // too many stops and starts may cause temporary service stoppage
-// this could also be handled when socket connections are made
-if(process.env.STREAM) {
-  Twitter.init()
-    .stream('statuses/filter', {track: TOPICS})
-    .onData(function(data) {
-      var tweetData = Twitter.formatData(data, TOPICS);
+var stream = process.env.STREAM;
 
-
-      // should check to see if topic is defined before broadcasting
-      // this could also be handled be only broadcasting to subscribed parties
-      Socket.broadcast(tweetData);
-    });
-}
+if(stream) Twitter
+  .init('statuses/filter', {track: TOPICS})
+  .onData(EventHub.broadcast.bind(EventHub));
 
 
 /*
@@ -84,13 +78,12 @@ if(process.env.STREAM) {
  */
 
 // defines directory to serve static assets from
-// does not yet recursively dig through directory
 Router.static('./public');
 
 Router.on('GET', '/', '/index.html');
 
 Router.on('GET', '/topics', function(req, res) {
-  send(TOPICS, res);
+  send(res, TOPICS);
 });
 
 Router.onUnknown(function(req, res) {
@@ -98,7 +91,7 @@ Router.onUnknown(function(req, res) {
   res.end('404 Page Not Found');
 });
 
-function send(data, res) {
+function send(res, data) {
   res.writeHead(200, {'Content-Type': 'application/json'});
   res.end(JSON.stringify(data) + '\n');
 }

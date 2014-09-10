@@ -3,12 +3,15 @@ var TwitterClient = require('twitter'),
   _ = require('lodash');
 
 var Twitter = {
+  _trackingData: null,
   _client: null,
   _stream: null
 };
 
-Twitter.init = function() {
+Twitter.init = function(type, options) {
   if(this._client) throw new Error('Twitter client already initialized.');
+
+  this._trackingData = options.track;
 
   this._client = new TwitterClient({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -17,7 +20,7 @@ Twitter.init = function() {
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   });
 
-  return this;
+  return this.stream(type, options);
 };
 
 Twitter.stream = function(type, options) {
@@ -36,11 +39,12 @@ Twitter.stream = function(type, options) {
 Twitter.onData = function(callback) {
   if(!this._stream) throw new Error('Twitter stream not initialized.');
 
-  this._stream.on('data', function(data) {
-    callback(data);
-  });
+  var _this = this;
 
-  return this;
+  this._stream.on('data', function(data) {
+    var tweetData = _this.formatData(data);
+    if(tweetData.topic) callback(tweetData.topic, tweetData);
+  });
 };
 
 Twitter.destroyStream = function() {
@@ -51,24 +55,23 @@ Twitter.destroyStream = function() {
 };
 
 // takes in a tweet objects and a list of possible topics it could match
-// returns a json formatted response => {topic: ..., text: ...}
-Twitter.formatData = function(data, topics) {
-  var text = data.text;
+// returns a formatted response => {topic: ..., text: ...}
+Twitter.formatData = function(data) {
+  var topics = this._trackingData,
+    text = data.text;
 
   var response = {
     topic: null,
-    topicId: null,
     text: text
   };
 
-  _.each(topics, function(topic, index) {
+  _.each(topics, function(topic) {
     if (_.contains(text.toLowerCase(), topic.toLowerCase())) {
-      response.topicId = index;
       response.topic = topic;
     }
   });
 
-  return JSON.stringify(response) + '\n';
+  return response;
 };
 
 module.exports = Twitter;

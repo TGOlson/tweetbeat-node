@@ -11,6 +11,7 @@ Helpers:
 * [node-ws module](https://github.com/einaros/ws)
 * [using node-ws module](https://github.com/heroku-examples/node-ws-test)
 * [websockets on heroku](https://devcenter.heroku.com/articles/websockets)
+* [socketio web game](https://github.com/guille/weplay)
 
 ## Setup
 
