@@ -10,35 +10,33 @@ var Twitter = require('./services/twitter'),
   EventHub = require('./services/event-hub');
 
 // topic list for tracking tweets
-// use shorter list for development
-// this needs to match list in tweets_controller
 var TOPICS = [
-  // "Coffee",
-  // "Tea",
-  // "DBCsleeps",
+  "Coffee",
+  "Tea",
+  "DBCsleeps",
   "Canada",
   "USA",
-  // "California",
+  "California",
   "Tesla",
-  // "Spring",
-  // "Summer",
-  // "Autumn",
-  // "Winter",
-  // "Santa",
-  // "Snowman",
+  "Spring",
+  "Summer",
+  "Autumn",
+  "Winter",
+  "Santa",
+  "Snowman",
   "Moltar",
-  // "Hurricane",
-  // "Tornado",
-  // "Earthquake",
-  // "Tsunami",
-  // "Blizzard",
-  // "Godzilla",
+  "Hurricane",
+  "Tornado",
+  "Earthquake",
+  "Tsunami",
+  "Blizzard",
+  "Godzilla",
   "King Kong",
-  // "John Lennon",
-  // "Voltar",
-  // "Tapioca",
-  // "Star Wars",
-  // "Xolov"
+  "John Lennon",
+  "Voltar",
+  "Tapioca",
+  "Star Wars",
+  "Xolov"
 ];
 
 

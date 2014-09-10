@@ -13,8 +13,8 @@ var EventHub = require('./event-hub');
 var Socket = function(socket) {
   var _this = this;
 
-  this._events = [];
   this._socket = socket;
+  this._events = [];
 
   this.name = Socket.makeName();
 
@@ -23,11 +23,11 @@ var Socket = function(socket) {
     _this._socket.send(data);
   };
 
-  socket.on('message', function(data) {
+  this._socket.on('message', function(data) {
     _this.modifySubscriptions(data);
   });
 
-  socket.on('close', function() {
+  this._socket.on('close', function() {
     _this.destroy();
   });
 };

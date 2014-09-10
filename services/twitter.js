@@ -43,6 +43,8 @@ Twitter.onData = function(callback) {
 
   this._stream.on('data', function(data) {
     var tweetData = _this.formatData(data);
+
+    // only invoke callback if a topic can be parsed from the tweet
     if(tweetData.topic) callback(tweetData.topic, tweetData);
   });
 };

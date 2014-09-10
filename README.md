@@ -4,18 +4,20 @@ Summoning the ghost of Tweetbeat past - in node.
 
 Helpers:
 
-* [node/twitter/socket](http://dillonbuchanan.com/programming/node-js-twitter-streaming-api-socket-io-twitter-cashtag-heatmap/)
 * [node/twitter/socket/react](http://javaguirre.net/2014/02/11/twitter-streaming-api-with-node-socket-io-and-reactjs/)
-* [pure websockets](https://gist.github.com/bradleywright/1021082)
 * [websockets definitions](http://en.wikipedia.org/wiki/WebSocket)
 * [node-ws module](https://github.com/einaros/ws)
 * [using node-ws module](https://github.com/heroku-examples/node-ws-test)
 * [websockets on heroku](https://devcenter.heroku.com/articles/websockets)
-* [socketio web game](https://github.com/guille/weplay)
+
+## About
+
+Implementing an event-driven node architecture with websockets. Clients subscribe to tweets topics by sending subscriptions requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
+
 
 ## Setup
 
-The root node app is available to serve assets, return API responses, and make websocket connections. The nested rails app `/assets` is mainly acting as a polyfill for serving the original tweetbeat assets, and making requests to the node application. 
+The root node app is available to serve assets, return API responses, and make websocket connections. The nested rails app `/assets` is mainly acting as a polyfill for serving the original tweetbeat assets, and making requests to the node application.
 
 First start the node app.
 
