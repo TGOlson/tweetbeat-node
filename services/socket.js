@@ -24,7 +24,7 @@ var Socket = function(socket) {
   };
 
   this._socket.on('message', function(data) {
-    _this.modifySubscriptions(data);
+    _this._modifySubscriptions(data);
   });
 
   this._socket.on('close', function() {
@@ -37,31 +37,36 @@ var Socket = function(socket) {
  * Instance methods
  */
 
-Socket.prototype.modifySubscriptions = function(data) {
+Socket.prototype._modifySubscriptions = function(data) {
   data = JSON.parse(data);
 
-  var event = data.event;
+  var handler = this.send,
+    event = data.event;
 
   if(isSubscribing(data)) {
-    this.subscribe(event);
+    this.on(event, handler);
   } else if(isUnsubscribing(data)) {
-    this.unsubscribe(event);
+    this.removeListener(event, handler);
   } else {
-    callback({error: 'Incorrectly formatted message.'});
+    this.unknownEvent(handler);
   }
 
 };
 
-Socket.prototype.subscribe = function(event) {
+Socket.prototype.on = function(event, handler) {
   this._events.push(event);
-  EventHub.on(event, this.send);
+  EventHub.on(event, handler);
 };
 
-Socket.prototype.unsubscribe = function(event) {
+Socket.prototype.removeListener = function(event, handler) {
   var i = this._events.indexOf(event);
   this._events.splice(i, 1);
 
-  EventHub.removeListener(event, this.send);
+  EventHub.removeListener(event, handler);
+};
+
+Socket.prototype.unknownEvent = function(handler) {
+  handler({error: 'Incorrectly formatted message.'});
 };
 
 Socket.prototype.destroy = function() {

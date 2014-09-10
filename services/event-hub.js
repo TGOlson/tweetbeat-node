@@ -5,9 +5,5 @@ var EventHub = function() {};
 
 util.inherits(EventHub, EventEmitter);
 
-EventHub.prototype.broadcast = function(event, data) {
-  this.emit(event, data);
-};
-
-// exports singleton instance of EventHub
+// export singleton instance of EventHub
 module.exports = new EventHub();

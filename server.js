@@ -1,7 +1,6 @@
 // Third party libraries
 var http = require('http'),
-  dotenv = require('dotenv').load(),
-  crypto = require('crypto');
+  dotenv = require('dotenv').load();
 
 // Internal modules
 var Twitter = require('./services/twitter'),
@@ -68,7 +67,7 @@ var stream = process.env.STREAM;
 
 if(stream) Twitter
   .init('statuses/filter', {track: TOPICS})
-  .onData(EventHub.broadcast.bind(EventHub));
+  .onData(EventHub.emit.bind(EventHub));
 
 
 /*
