@@ -12,14 +12,12 @@ Helpers:
 
 ## About
 
-Implementing an event-driven node architecture with websockets. Clients subscribe to tweets topics by sending subscriptions requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
+Implemented using an event-driven node architecture with websockets. Clients subscribe to tweets topics by sending subscription requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
 
 
 ## Setup
 
-The root node app is available to serve assets, return API responses, and make websocket connections. The nested rails app `/assets` is mainly acting as a polyfill for serving the original tweetbeat assets, and making requests to the node application.
-
-First start the node app.
+To run the node app
 
 Install dependencies
 
@@ -42,7 +40,16 @@ Run the node app with `STREAM=true`
 $ STREAM=true node server.js
 ```
 
-Then start the rails app
+Navigate to `localhost:8080`. In the terminal you should see a new connection
+
+```
+Websocket connection opened
+Current sockets: 1
+```
+
+In addition to the node app, the nested rails app in `/assets` is also available for serving the original tweetbeat assets. This is a temporary polyfill, but is fun to see the old app run on the new server. [note, depending on the current state of the node app, this may not be functional]
+
+To start the rails app
 
 ```
 $ cd assets/
@@ -60,12 +67,7 @@ Run the rails app
 $ rails s
 ```
 
-Navigate to `localhost:3000` to see the app running. In the console you should see a new connection
-
-```
-Websocket connection opened
-Current sockets: 1
-```
+Navigate to `localhost:3000` to see the app running.
 
 Effectively, the rails app is serving original tweetbeat assets, which communicates with the node server via websockets. This probably won't work in production, but acts as a polyfill solution until the assets are ported over to the node app. Note: this solution is converting websocket responses to JS events, and has some bugs.
 
@@ -78,17 +80,10 @@ STREAM=true node server.js
 
 Navigate over to `localhost:8080`, open the console, and you should see tweet topics being logged.
 
-Subscribe to stream. [feature temporarily removed]
-```
-curl localhost:8080/stream
-````
+Subscribe to specific topics by clicking the keyword. The count indicates how many tweets have come through. You can view the tweets by opening the chrome console.
 
-Subscribe to specific topics. [feature temporarily removed]
-```
-curl localhost:8080/stream?topics=usa,ruby
-````
+See a list of all available topics make requests to `/topics`.
 
-See a list of all available topics.
 ```
 curl localhost:8080/topics
 ````
@@ -96,6 +91,5 @@ curl localhost:8080/topics
 ## TODO
 * Implement gulp to serve assets
 * Create run command to start both apps
-* Allow client to subscribe to specific topics - right now all clients get all tweet events
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
