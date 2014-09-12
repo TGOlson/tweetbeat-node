@@ -1,7 +1,13 @@
-$(function() {
+$(init);
 
-  console.log('Hi there');
-  initWebsocket();
+function init() {
+
+  var socket = new Socket();
+
+  var callback = function(data) {
+    incrementCount(data.topic);
+  };
+
   initTopics();
 
   $('#tweet-topics').click(function(e) {
@@ -11,32 +17,12 @@ $(function() {
     $topic.toggleClass('subscribed').toggleClass('unsubscribed');
 
     if($topic.hasClass('subscribed')) {
-      subscribe(text);
+      socket.subscribe(text, callback);
     } else {
-      unsubscribe(text);
+      socket.unsubscribe(text, callback);
     }
   });
 
-});
-
-/*
- * Proof of concept views
- */
-
-var socket;
-
-// should fire callback when connected
-function initWebsocket() {
-
-  var host = location.origin.replace('http', 'ws');
-
-  socket = new WebSocket(host);
-
-  socket.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    console.log(data);
-    incrementCount(data.topic);
-  };
 }
 
 function initTopics() {
@@ -65,24 +51,6 @@ function addTopic(topic) {
   $('#tweet-topics').append($li);
 }
 
-function subscribe(event) {
-  var message = formatMessage('subscribe', event);
-  socket.send(message);
-}
-
-function unsubscribe(event) {
-  var message = formatMessage('unsubscribe', event);
-  socket.send(message);
-}
-
-function formatMessage(action, event) {
-  var message = {
-    action: action,
-    event: event
-  };
-
-  return JSON.stringify(message);
-}
 
 function incrementCount(topic) {
   topic = topic.toLowerCase().replace(' ', '-');

@@ -93,3 +93,5 @@ curl localhost:8080/topics
 * Create run command to start both apps
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
+* Show 'connecting' loading screen
+* Show error if websocket not connected.
