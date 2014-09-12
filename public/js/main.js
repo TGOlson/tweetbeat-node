@@ -5,6 +5,7 @@ function init() {
   var socket = new Socket();
 
   var callback = function(data) {
+    console.log(data);
     incrementCount(data.topic);
   };
 
@@ -17,9 +18,13 @@ function init() {
     $topic.toggleClass('subscribed').toggleClass('unsubscribed');
 
     if($topic.hasClass('subscribed')) {
+      // TODO: change this to 'on'
+      // where subscription takes place under the hood
       socket.subscribe(text, callback);
     } else {
-      socket.unsubscribe(text, callback);
+      // TODO: change this to 'removeListener'
+      // where unsubscription takes place under the hood
+      socket.unsubscribe(text);
     }
   });
 
