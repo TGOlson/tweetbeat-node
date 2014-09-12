@@ -43,7 +43,7 @@ $ STREAM=true node server.js
 Navigate to `localhost:8080`. In the terminal you should see a new connection
 
 ```
-Websocket connection opened
+OPENED websocket connection: client-0
 Current sockets: 1
 ```
 

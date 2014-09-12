@@ -9,7 +9,7 @@ function init() {
     incrementCount(data.topic);
   };
 
-  initTopics();
+  setTopics();
 
   $('#tweet-topics').click(function(e) {
     var $topic = $(e.target),
@@ -18,23 +18,18 @@ function init() {
     $topic.toggleClass('subscribed').toggleClass('unsubscribed');
 
     if($topic.hasClass('subscribed')) {
-      // TODO: change this to 'on'
-      // where subscription takes place under the hood
-      socket.subscribe(text, callback);
+      socket.on(text, callback);
     } else {
-      // TODO: change this to 'removeListener'
-      // where unsubscription takes place under the hood
-      socket.unsubscribe(text);
+      socket.removeListener(text);
     }
   });
 
 }
 
-function initTopics() {
+
+function setTopics() {
   $.get('/topics', function(response) {
-    $.each(response, function(i, topic) {
-      addTopic(topic);
-    });
+    response.forEach(addTopic);
   });
 }
 
@@ -55,7 +50,6 @@ function addTopic(topic) {
 
   $('#tweet-topics').append($li);
 }
-
 
 function incrementCount(topic) {
   topic = topic.toLowerCase().replace(' ', '-');
