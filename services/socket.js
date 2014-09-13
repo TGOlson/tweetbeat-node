@@ -16,7 +16,7 @@ var Socket = function(socket) {
   this._socket = socket;
   this._events = [];
 
-  this.name = Socket.makeName();
+  this.name = Socket.uniqueId('client_');
 
   this.send = function(data) {
     data = JSON.stringify(data);
@@ -88,7 +88,9 @@ Socket.prototype._removeListeners = function() {
  */
 
 Socket._socketServer = null;
-Socket._nextId = 0;
+
+// start ids at 1
+Socket._nextId = 1;
 
 Socket._sockets = {
   length: 0
@@ -105,8 +107,8 @@ Socket.init = function(server) {
   });
 };
 
-Socket.makeName = function() {
-  var name = 'client-' + this._nextId;
+Socket.uniqueId = function(prefix) {
+  var name = prefix + this._nextId;
   this._nextId++;
   return name;
 };

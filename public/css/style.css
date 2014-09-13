@@ -11,7 +11,7 @@ h1 {
   padding: 1px 0 1px 5px;
 }
 
-.topic.subscribed {
+.topic.active {
   background-color: #aaa;
   color: white;
 }

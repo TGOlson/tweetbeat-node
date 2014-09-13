@@ -11,13 +11,13 @@ function init() {
 
   setTopics();
 
-  $('#tweet-topics').click(function(e) {
-    var $topic = $(e.target),
+  $('#tweet-topics').click('li', function(e) {
+    var $topic = $(e.target).closest('.topic'),
       text = $topic.find('.topic-text').text();
 
-    $topic.toggleClass('subscribed').toggleClass('unsubscribed');
+    $topic.toggleClass('active');
 
-    if($topic.hasClass('subscribed')) {
+    if($topic.hasClass('active')) {
       socket.on(text, callback);
     } else {
       socket.removeListener(text);
@@ -35,7 +35,7 @@ function setTopics() {
 
 function addTopic(topic) {
   var $li = $('<li>')
-      .addClass('topic unsubscribed')
+      .addClass('topic')
       .attr({id: topic.toLowerCase().replace(' ', '-')}),
 
     $topic = $('<span>')
