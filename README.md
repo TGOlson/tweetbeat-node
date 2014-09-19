@@ -17,8 +17,6 @@ Implemented using an event-driven node architecture with websockets. Clients sub
 
 ## Setup
 
-To run the node app
-
 Install dependencies
 
 ```
@@ -47,12 +45,18 @@ OPENED websocket connection: client_1
 Current sockets: 1
 ```
 
-In addition to the node app, the nested rails app in `/assets` is also available for serving the original tweetbeat assets. This is a temporary polyfill, but is fun to see the old app run on the new server. [note, depending on the current state of the node app, this may not be functional]
+View the in-process development of tweetbeat-node at `http://localhost:8080/tweetbeat`.
+
+## Original assets
+
+The previous tweetbeat assets have been ported over and can be found in `/public`. Original scripts and stylesheets can be found in `public/js/original/` and `public/css/original/`, respectively. The assets are currently used on page `/tweetbeat`.
+
+In addition to the node app, the nested rails app in `/assets-old` is also available for serving the original tweetbeat assets. This may be helpful to quickly test previous functionality.
 
 To start the rails app
 
 ```
-$ cd assets/
+$ cd assets-old/
 $ bundle install
 ```
 
@@ -68,8 +72,6 @@ $ rails s
 ```
 
 Navigate to `localhost:3000` to see the app running.
-
-Effectively, the rails app is serving original tweetbeat assets, which communicates with the node server via websockets. This probably won't work in production, but acts as a polyfill solution until the assets are ported over to the node app. Note: this solution is converting websocket responses to JS events, and has some bugs.
 
 ## Development
 
@@ -90,7 +92,6 @@ curl localhost:8080/topics
 
 ## TODO
 * Implement gulp to serve assets
-* Create run command to start both apps
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
 * Show 'connecting' loading screen
