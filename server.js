@@ -79,6 +79,8 @@ Router.static('./public');
 
 Router.on('GET', '/', '/index.html');
 
+Router.on('GET', '/tweetbeat', '/tweetbeat-assets/index.html');
+
 Router.on('GET', '/topics', function(req, res) {
   send(res, TOPICS);
 });
