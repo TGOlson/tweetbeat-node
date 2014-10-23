@@ -9,7 +9,9 @@ assets-old/tmp/*
 assets-old/.env
 assets-old/.DS_Store
 
+src/vendor
+
 # Compiled assets
 public/js
 public/css
-public/**/*.html
+public/*.html

@@ -32,8 +32,6 @@ Router.static = function(directory) {
   var files = this._getFiles(directory),
     _this = this;
 
-  console.log('Serving static files: \n', files);
-
   _.each(files, function(fileName) {
     _this._defineStatic(directory, fileName);
   });

@@ -3,7 +3,7 @@
  */
 
 var Socket = function() {
-  var host = location.origin.replace('http', 'ws');
+  var host = location.origin.replace('http', 'ws'),
     _this = this;
 
   // should fire callback when connected
