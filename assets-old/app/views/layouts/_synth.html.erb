@@ -3,16 +3,14 @@
   <hr id="top-line"/>
   <div id='synth_pads'>
     <ul id='all_pads'>
-      <ul id='all_pads'>
-        <% 9.times do |i| %>
-          <li id="<%= i %>"><div class="ctrl_bound letter_display hidden"><%= bindings_and_names[i][0] %></div><div id="synthname"><%= bindings_and_names[i][1] %></div><div class='drop_area'></div></li>
-        <% end %>
-      </ul>
+      <% 9.times do |i| %>
+        <li id="<%= i %>"><div class="ctrl_bound letter_display hidden"><%= bindings_and_names[i][0] %></div><div id="synthname"><%= bindings_and_names[i][1] %></div><div class='drop_area'></div></li>
+      <% end %>
     </ul>
   </div>
 
   <div id='synth_controls'>
-    <div id="library-container">  
+    <div id="library-container">
       <div id="library">
         <ul id="lib-list">
           <li class="current-lib" lib-id="0">SPACE</li>

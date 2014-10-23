@@ -41,7 +41,7 @@ This will compile necessary assets from `src/` to `public/`, as well as start th
 However, because re-connections to the Twitter steaming API are monitored, this will not start the Twitter stream. To start the app with the Twitter stream enabled
 
 ```
-$ gulp stream
+$ gulp --stream
 ```
 
 (this effectively runs the app with the environment variable `STREAM=true`)
@@ -62,7 +62,7 @@ View the in-process porting of the original tweetbeat to tweetbeat-node at `http
 Start the app with the Twitter stream initialized, set `STREAM=true`. This allows for conditionally connecting to the twitter stream, which is important to limit requests when in development.
 
 ```
-$ gulp stream
+$ gulp --stream
 ````
 
 Navigate over to `localhost:8080`, open the console, and you should see tweet topics being logged.
@@ -76,6 +76,8 @@ curl localhost:8080/topics
 ````
 
 ## TODO
+* Touch up README with technologies
+* Look into server side templating with React
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
 * Show 'connecting' loading screen
