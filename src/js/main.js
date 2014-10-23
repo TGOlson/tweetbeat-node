@@ -1,23 +1,11 @@
 $(init);
 
-console.log('tracueiring');
-
-class Greeter {
-  constructor(message) {
-    this.message = message;
-  }
-
-  greet() {
-    console.log(this.message);
-  }
-}
-
-var greeter = new Greeter('Hello, world!');
-greeter.greet();
-
 function init() {
 
   var socket = new Socket();
+
+  // for debugging
+  window.socket = socket;
 
   var callback = function(data) {
     console.log(data);

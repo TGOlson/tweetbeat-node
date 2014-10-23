@@ -12,7 +12,7 @@ gulp.task('scripts', function() {
   // gulp.src('./src/js/**/*.js')
 
   gulp.src('./src/js/*.js')
-    .pipe(traceur())
+    .pipe(traceur({blockBinding: true}))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('./public/js'));
 });

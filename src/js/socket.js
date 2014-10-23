@@ -1,149 +1,128 @@
-/*
- * Socket Constructor
- */
+class Socket {
+  constructor() {
+    this._host = location.origin.replace('http', 'ws');
+    this._socket = new WebSocket(this._host);
+    this._events = {};
 
-var Socket = function() {
-  var host = location.origin.replace('http', 'ws'),
-    _this = this;
+    this._setMessageHandler((data) => {
+      this.emit(data.topic, data);
+    });
 
-  // should fire callback when connected
-  // or resolve a promise?
-  this._socket = new WebSocket(host);
+    // other handlers
+    this._setOpenHandler((event) => {
+      console.log('Opened', event);
+    });
 
-  // onmessage data handler
-  this._setMessageHandler(function(data) {
-    _this.emit(data.topic, data);
-  });
+    this._setErrorHandler((event) => {
+      console.log('Error', event);
+    });
 
-  // other handlers
-  this._setOpenHandler(function(event) {
-    console.log('Opened', event);
-  });
-
-  this._setErrorHandler(function(event) {
-    console.log('Error', event);
-  });
-
-  this._setCloseHandler(function(event) {
-    console.log('Close', event);
-  });
-
-  // temporary for development
-  window.socket = this;
-};
-
-
-/*
- * Instance properties
- */
-
-Socket.prototype._events = {};
-
-
-/*
- * Instance methods
- */
-
-// socket.on sets an event handler for the specified event
-// and also alerts the server to start sending those events
-Socket.prototype.on = function(event, callback) {
-  this._setHandler(event, callback);
-  this._modifySubscriptions('subscribe', event);
-};
-
-// socket.removeListener removes an event handler for the specified event
-// and also alerts the server to stop sending those events
-Socket.prototype.removeListener = function(event, callback) {
-  this._removeHandler(event);
-  this._modifySubscriptions('unsubscribe', event);
-};
-
-Socket.prototype.send = function(data) {
-  data = JSON.stringify(data);
-
-  if(this._isOpen()) {
-    this._socket.send(data);
-  } else {
-    console.log('Socket connection is closed. Try refreshing client or reconnecting.');
+    this._setCloseHandler((event) => {
+      console.log('Close', event);
+    });
   }
-};
 
-Socket.prototype.emit = function(event, data) {
-  var handler = this._events[event];
-  if(handler) handler(data);
-};
+  // socket.on sets an event handler for the specified event
+  // and also alerts the server to start sending those events
+  on(event, callback) {
+    this._setHandler(event, callback);
+    this._modifySubscriptions('subscribe', event);
+  }
+
+  // socket.removeListener removes an event handler for the specified event
+  // and also alerts the server to stop sending those events
+  removeListener(event, callback) {
+    this._removeHandler(event);
+    this._modifySubscriptions('unsubscribe', event);
+  }
+
+  send(data) {
+    data = JSON.stringify(data);
+
+    if(this._isOpen()) {
+      this._socket.send(data);
+    } else {
+      console.log('Socket connection is closed. Try refreshing client or reconnecting.');
+    }
+  }
+
+  emit(event, data) {
+    let handler = this._events[event];
+    if(handler) handler(data);
+  }
 
 
-/*
- * Private instance methods
- */
+  /*
+   * Private instance methods
+   */
 
-Socket.prototype._setMessageHandler = function(handler) {
-  this._socket.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    handler(data);
-  };
-};
+  _setMessageHandler(handler) {
+    this._socket.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      handler(data);
+    };
+  }
 
-// refactor these if they don't do anything extra besides setting callbacks
-Socket.prototype._setOpenHandler = function(handler) {
-  this._socket.onopen = handler;
-};
+  // refactor these if they don't do anything extra besides setting callbacks
+  _setOpenHandler(handler) {
+    this._socket.onopen = handler;
+  }
 
-Socket.prototype._setErrorHandler = function(handler) {
-  this._socket.onerror = handler;
-};
+  _setErrorHandler(handler) {
+    this._socket.onerror = handler;
+  }
 
-Socket.prototype._setCloseHandler = function(handler) {
-  this._socket.onclose = handler;
-};
+  _setCloseHandler(handler) {
+    this._socket.onclose = handler;
+  }
 
-// naive implementation of events
-// each event can only have one listener
-Socket.prototype._setHandler = function(event, handler) {
+  // naive implementation of events
+  // each event can only have one listener
+  _setHandler(event, handler) {
 
-  // for dev purposes only
-  if(this._events[event]) console.log('Handler already set for', event);
+    // for dev purposes only
+    if(this._events[event]) console.log('Handler already set for', event);
 
-  this._events[event] = handler;
-};
+    this._events[event] = handler;
+  }
 
-// naive implementation of events
-// each event can only have one listener
-Socket.prototype._removeHandler = function(event) {
+  // naive implementation of events
+  // each event can only have one listener
+  _removeHandler(event) {
 
-  // for dev purposes only
-  if(!this._events[event]) console.log('No handler set for', event);
+    // for dev purposes only
+    if(!this._events[event]) console.log('No handler set for', event);
 
-  delete this._events[event];
-};
+    delete this._events[event];
+  }
 
-Socket.prototype._modifySubscriptions = function(action, event) {
-  var message = {
-    action: action,
-    event: event
-  };
+  _modifySubscriptions(action, event) {
+    let message = {
+      action: action,
+      event: event
+    };
 
-  this.send(message);
-};
+    this.send(message);
+  }
 
-// development only
-// events should be an object of keywords with associated callbacks
-// in the case of tweetbeat, the callbacks are calls to audio plays
-Socket.prototype._viewEvents = function() {
-  var events = this._events;
+  // development only
+  // events should be an object of keywords with associated callbacks
+  // in the case of tweetbeat, the callbacks are calls to audio plays
+  _viewEvents() {
+    let events = this._events;
 
-  // later this might want to map functions to their respective audio
-  // so output looks like
-  // {'USA': 'audio-file-name', etc.}
+    // later this might want to map functions to their respective audio
+    // so output looks like
+    // {'USA': 'audio-file-name', etc.}
 
-  console.log(events);
-};
+    console.log(events);
+  }
 
-// CONNECTING  0 The connection is not yet open.
-// OPEN  1 The connection is open and ready to communicate.
-// CLOSING 2 The connection is in the process of closing.
-// CLOSED  3 The connection is closed or couldn't be opened.
-Socket.prototype._isOpen = function() {
-  return this._socket.readyState === 1;
-};
+  // CONNECTING  0 The connection is not yet open.
+  // OPEN  1 The connection is open and ready to communicate.
+  // CLOSING 2 The connection is in the process of closing.
+  // CLOSED  3 The connection is closed or couldn't be opened.
+  _isOpen() {
+    return this._socket.readyState === 1;
+  }
+}

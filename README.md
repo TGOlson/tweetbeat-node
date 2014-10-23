@@ -8,7 +8,7 @@ Summoning the ghost of Tweetbeat past - in node.
 
 ## About
 
-Implemented using an event-driven node architecture with websockets. Clients subscribe to tweets topics by sending subscription requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
+Implemented using an event-driven node architecture with websockets. Clients subscribe to tweet topics by sending subscription requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
 
 Client side code is written using ES6, and makes use of a similar event-driven pattern, using React and Flux to achieve a unidirectional data flow.
 
