@@ -30,6 +30,7 @@
     "gulp-traceur": "^0.13.0",
     "gulp-ignore": "^1.2.1",
     "gulp-nodemon": "^1.0.4",
-    "nodemon": "^1.2.1"
+    "nodemon": "^1.2.1",
+    "gulp-react": "^1.0.2"
   }
 }

@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     traceur = require('gulp-traceur'),
     exclude = require('gulp-ignore').exclude,
     less = require('gulp-less'),
+    react = require('gulp-react'),
     clean = require('gulp-clean'),
     nodemon = require('gulp-nodemon');
 
@@ -17,9 +18,14 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('./public/js'));
 });
 
+var vendorScripts = [
+  './src/vendor/react/react.js',
+  './src/vendor/react/react-with-addons.js',
+  './src/vendor/traceur-runtime/traceur-runtime.js'
+];
+
 gulp.task('vendor-scripts', function() {
-  gulp.src('./src/vendor/**/*.js')
-    .pipe(exclude('/**/*min.js'))
+  gulp.src(vendorScripts)
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest('./public/js'));
 });
@@ -36,6 +42,13 @@ gulp.task('less', function() {
 });
 
 gulp.task('views', function() {
+  gulp.src('./src/views/**/*.jsx')
+    .pipe(react())
+    .pipe(concat('views.js'))
+    .pipe(gulp.dest('./public/js'));
+});
+
+gulp.task('html', function() {
   gulp.src('./src/**/*.html')
     .pipe(gulp.dest('./public'));
 });
@@ -52,12 +65,13 @@ gulp.task('clean', function() {
   }).pipe(clean());
 });
 
-gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'views']);
+gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'views', 'html']);
 
 gulp.task('watch', function(){
   gulp.watch('./src/js/**/*.js', ['scripts']);
   gulp.watch('./src/less/**/*.html', ['less']);
-  gulp.watch('./src/**/*.html', ['views']);
+  gulp.watch('./src/views/**/*.js', ['views']);
+  gulp.watch('./src/**/*.html', ['html']);
 });
 
 gulp.task('server', function() {
