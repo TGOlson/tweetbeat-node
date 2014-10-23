@@ -8,3 +8,8 @@ assets-old/log/*.log
 assets-old/tmp/*
 assets-old/.env
 assets-old/.DS_Store
+
+# Compiled assets
+public/js
+public/css
+public/**/*.html

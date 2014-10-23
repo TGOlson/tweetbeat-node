@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TweetBeat</title>
+  <link href='http://fonts.googleapis.com/css?family=Rochester' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <link rel="stylesheet" type="text/css" href="css/original/layout.css">
+  <link rel="stylesheet" type="text/css" href="css/original/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/original/visualizer.css">
+</head>
+<body class="unselectable">
+
+  <div id="toggle_view" class="slide_toggle synth_view">
+    <div id='circle_toggle'></div>
+    <div id='toggle_icon'>
+      <i class="fa fa-wrench"></i>
+      <i class="fa fa-certificate" style="display: none"></i>
+    </div>
+  </div>
+
+  <div class="deletion-field">remove keyword</div>
+
+  <div class='synth'>
+    <div id="up-button" class="directional-button"></div>
+    <div id="down-button" class="directional-button"></div>
+
+    <div id='topics_container'>
+      <ul id='topics_list' class='connected'>
+          <!-- <% if index < 15 %> -->
+            <div class='deletable'><li class='topic' id="<%= index %>">topic</li></div>
+        <!-- <% end %> -->
+      </ul>
+    </div>
+
+    <div id='synth_container'>
+      <p id='moltar'>Moltar</p>
+      <hr id="top-line"/>
+      <div id='synth_pads'>
+        <ul id='all_pads'>
+          <ul id='all_pads'>
+              <li id="<%= i %>">
+                <div class="ctrl_bound letter_display hidden">bindings_and_names[i][0]</div>
+                <div id="synthname">bindings_and_names[i][1]</div>
+                <div class='drop_area'>
+              </div></li>
+          </ul>
+        </ul>
+      </div>
+
+      <div id='synth_controls'>
+        <div id="library-container">  
+          <div id="library">
+            <ul id="lib-list">
+              <li class="current-lib" lib-id="0">SPACE</li>
+              <li lib-id="1">NATURAL</li>
+              <li lib-id="2">HIPHOP</li>
+              <li lib-id="3">MARIO</li>
+            </ul>
+          </div>
+          <div id="prev"></div>
+          <div id="next"></div>
+        </div>
+
+        <div id="slider-vertical" style="height:150px;"></div>
+        <canvas id="xy"></canvas>
+        <button class="filter-toggle">On | Off</button>
+      </div>
+    </div>
+
+
+    <div id='about_section'><p>Tweetbeat</p></div>
+  </div>
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+  <script src="js/original/layout.js"></script>
+  <script src="js/original/sampleobject.js"></script>
+  <script src="js/original/scrolling.js"></script>
+  <script src="js/original/stream.js"></script>
+  <script src="js/original/topics.js"></script>
+  <!-- <script sorioriginal/ginal/js/visualizer.js"></script> -->
+  <script src="js/original/app.js"></script>
+</body>
+</html>
