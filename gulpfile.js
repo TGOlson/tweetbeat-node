@@ -35,7 +35,7 @@ var scriptPaths = [
     ],
 
     htmlPaths = [
-      './app/*.html'
+      './app/src/*.html'
     ];
 
 
