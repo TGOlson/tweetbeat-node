@@ -2,53 +2,54 @@
 
 /*
  * This file bootstraps the entire component tree
- * As such, it needs to be loaded last
+ * App.start should be called only after all views are loaded
  */
 
 var PAD_SETTINGS = [
   {
     shortcut: 'q',
-    instrument: 'SYNTH1'
+    name: 'SYNTH1'
   },
   {
     shortcut: 'w',
-    instrument: 'SYNTH2'
+    name: 'SYNTH2'
   },
   {
     shortcut: 'e',
-    instrument: 'SYNTH3'
+    name: 'SYNTH3'
   },
   {
     shortcut: 'a',
-    instrument: 'BASS1'
+    name: 'BASS1'
   },
   {
     shortcut: 's',
-    instrument: 'BASS2'
+    name: 'BASS2'
   },
   {
     shortcut: 'd',
-    instrument: 'BASS3'
+    name: 'BASS3'
   },
   {
     shortcut: 'z',
-    instrument: 'KICK1'
+    name: 'KICK1'
   },
   {
     shortcut: 'x',
-    instrument: 'KICK2'
+    name: 'KICK2'
   },
   {
     shortcut: 'c',
-    instrument: 'PERC3'
+    name: 'PERC3'
   }
 ];
 
-React.renderComponent(
-  <Synth pads={PAD_SETTINGS} />,
-  document.getElementById('content')
-);
+function App() {}
 
+App.start = function() {
+  var target = document.getElementById('content');
+  React.renderComponent(<Synth pads={PAD_SETTINGS} />, target);
+}
 
 // $.getJSON('inbox.json', function(emails) {
 //   React.renderComponent(<App emails={emails} />, document.body);

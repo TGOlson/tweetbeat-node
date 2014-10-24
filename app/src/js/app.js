@@ -1,3 +1,10 @@
+// initialize the react components
+// TODO: move this to a better place
+App.start();
+
+
+// dirty proof of concept stuff
+// TODO: clean this up
 $(init);
 
 function init() {

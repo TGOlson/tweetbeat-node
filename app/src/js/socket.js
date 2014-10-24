@@ -10,15 +10,15 @@ class Socket {
 
     // other handlers
     this._setOpenHandler((event) => {
-      console.log('Opened', event);
+      console.log('Socket Opened', event);
     });
 
     this._setErrorHandler((event) => {
-      console.log('Error', event);
+      console.log('Socket Error', event);
     });
 
     this._setCloseHandler((event) => {
-      console.log('Close', event);
+      console.log('Socket Close', event);
     });
   }
 
@@ -97,12 +97,7 @@ class Socket {
   }
 
   _modifySubscriptions(action, event) {
-    let message = {
-      action: action,
-      event: event
-    };
-
-    this.send(message);
+    this.send({action, event});
   }
 
   // development only

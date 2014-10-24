@@ -62,7 +62,9 @@ gulp.task('less', function() {
 
 gulp.task('views', function() {
   gulp.src(viewPaths)
-    .pipe(react())
+
+    // compile jsx with es6 syntax
+    .pipe(react({harmony: true}))
     .pipe(concat('views.js'))
     .pipe(gulp.dest('./public/js'));
 });
@@ -79,9 +81,8 @@ gulp.task('clean', function() {
     './public/css',
   ];
 
-  gulp.src(compiledFiles, {
-    read: false
-  }).pipe(clean());
+  gulp.src(compiledFiles, {read: false})
+    .pipe(clean());
 });
 
 gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'views', 'html']);
