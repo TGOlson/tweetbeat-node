@@ -1,14 +1,12 @@
 # tweetbeat-node
 
-Web-based synthesizer that can be played by Twitter.
-
-Summoning the ghost of Tweetbeat past - in node.
-
-[Original Tweetbeat](https://github.com/TGOlson/tweetbeat.git).
+Summoning the ghost of Tweetbeat past - in node. [Original Tweetbeat](https://github.com/TGOlson/tweetbeat.git).
 
 ## About
 
-Implemented using an event-driven node architecture with websockets. Clients subscribe to tweet topics by sending subscription requests to the server via websockets. Once the server receives a tweet, it sends a message over websockets to any subscribed parties.
+Web-based synthesizer that can be played by Twitter.
+
+Implemented using an event-driven node architecture with websockets. Clients subscribe to tweet topics by sending subscription requests to the server - once the server receives a tweet, it notifies any subscribed parties.
 
 Client side code is written using ES6, and makes use of a similar event-driven pattern, using React and Flux to achieve a unidirectional data flow.
 
@@ -36,7 +34,7 @@ Run the app
 $ gulp
 ```
 
-This will compile necessary assets from `src/` to `public/`, as well as start the server.
+This will compile necessary assets from `src/` to `public/`, as well as start the server. Asset compilation can be done manually using `gulp compile`.
 
 However, because re-connections to the Twitter steaming API are monitored, this will not start the Twitter stream. To start the app with the Twitter stream enabled
 
@@ -55,8 +53,6 @@ OPENED websocket connection: client_1
 Current sockets: 1
 ```
 
-View the in-process porting of the original tweetbeat to tweetbeat-node at `http://localhost:8080/tweetbeat`.
-
 ## Development
 
 Start the app with the Twitter stream initialized, set `STREAM=true`. This allows for conditionally connecting to the twitter stream, which is important to limit requests when in development.
@@ -69,7 +65,7 @@ Navigate over to `localhost:8080`, open the console, and you should see tweet to
 
 Subscribe to specific topics by clicking the keyword. The count indicates how many tweets have come through. You can view the tweets by opening the chrome console.
 
-See a list of all available topics make requests to `/topics`.
+See a list of all available topics, make requests to `/topics`.
 
 ```
 curl localhost:8080/topics
@@ -81,4 +77,5 @@ curl localhost:8080/topics
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
 * Show 'connecting' loading screen
-* Show error if websocket not connected.
+* Show error if websocket not connected or not supported.
+* ?
