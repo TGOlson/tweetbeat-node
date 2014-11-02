@@ -2,16 +2,11 @@
 
 var Pad = React.createClass({
   handlePadHit() {
-    this.toggleHitStateAndRender();
+    AppActions.padDown(this.props);
 
     setTimeout(() => {
-      this.toggleHitStateAndRender();
+      AppActions.padUp(this.props);
     }, 150);
-  },
-
-  toggleHitStateAndRender() {
-    this.props.isHit = !this.props.isHit;
-    this.setState(this.props);
   },
 
   render() {

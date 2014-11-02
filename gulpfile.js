@@ -17,6 +17,7 @@ var scriptPaths = [
     ],
 
     vendorScriptPaths = [
+      './app/vendor/flux/dist/Flux.js',
       './app/vendor/react/react.js',
       './app/vendor/react/react-with-addons.js',
       './app/vendor/traceur-runtime/traceur-runtime.js'
@@ -30,8 +31,8 @@ var scriptPaths = [
       './app/src/less/*.less'
     ],
 
-    viewPaths = [
-      './app/src/views/**/*.jsx'
+    componentPaths = [
+      './app/src/js/components/**/*.jsx'
     ],
 
     htmlPaths = [
@@ -60,12 +61,12 @@ gulp.task('less', function() {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('views', function() {
-  gulp.src(viewPaths)
+gulp.task('components', function() {
+  gulp.src(componentPaths)
 
     // compile jsx with es6 syntax
     .pipe(react({harmony: true}))
-    .pipe(concat('views.js'))
+    .pipe(concat('components.js'))
     .pipe(gulp.dest('./public/js'));
 });
 
@@ -85,12 +86,12 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
-gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'views', 'html']);
+gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'components', 'html']);
 
 gulp.task('watch', function(){
   gulp.watch(scriptPaths, ['scripts']);
   gulp.watch(lessPaths, ['less']);
-  gulp.watch(viewPaths, ['views']);
+  gulp.watch(componentPaths, ['components']);
   gulp.watch(htmlPaths, ['html']);
 });
 

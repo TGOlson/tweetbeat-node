@@ -49,7 +49,7 @@ function App() {}
 App.start = function() {
   var target = document.getElementById('content');
   React.renderComponent(<Synth pads={PAD_SETTINGS} />, target);
-}
+};
 
 // $.getJSON('inbox.json', function(emails) {
 //   React.renderComponent(<App emails={emails} />, document.body);
