@@ -19,6 +19,12 @@ $ npm install
 $ bower install
 ```
 
+Install gulp
+
+```
+$ npm install gulp -g
+```
+
 Create a `.env` file with valid credentials
 
 ```

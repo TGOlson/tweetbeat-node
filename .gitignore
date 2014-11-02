@@ -9,7 +9,7 @@ assets-old/tmp/*
 assets-old/.env
 assets-old/.DS_Store
 
-src/vendor
+app/vendor
 
 # Compiled assets
 public/js

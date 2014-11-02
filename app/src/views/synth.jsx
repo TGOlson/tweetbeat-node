@@ -12,10 +12,12 @@ var Synth = React.createClass({
     });
 
     return (
-      <div className="synth" onClick={this.handleClick}>
-        <p className="muted">SynthPad made by React, neato</p>
-        <p className="muted">These do not do anything right now, though</p>
-        {pads}
+      <div className="synth">
+        <p id="moltar-logo">Moltar</p>
+        <hr id="synth-top-border" />
+        <div className="synth-pads">
+          {pads}
+        </div>
       </div>
     );
   }
