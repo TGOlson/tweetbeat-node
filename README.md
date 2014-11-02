@@ -77,6 +77,14 @@ See a list of all available topics, make requests to `/topics`.
 curl localhost:8080/topics
 ````
 
+## Helpful React/Flux Reads
+
+* https://github.com/facebook/flux/tree/master/examples/flux-todomvc
+* http://facebook.github.io/react/blog/2014/05/06/flux.html
+* http://facebook.github.io/flux/docs/todo-list.html
+* https://github.com/enaqx/awesome-react
+* https://github.com/prabirshrestha/hn-react
+
 ## TODO
 * Touch up README with technologies
 * Look into server side templating with React
