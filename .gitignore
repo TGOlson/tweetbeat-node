@@ -4,8 +4,8 @@ npm-debug.log
 
 # Original Tweetbeat assets
 assets_old/.bundle
-assets_old/log/*.log
-assets_old/tmp/*
+assets_old/log
+assets_old/tmp
 assets_old/.env
 assets_old/.DS_Store
 

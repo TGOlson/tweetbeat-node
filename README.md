@@ -85,6 +85,7 @@ curl localhost:8080/topics
 ## TODO
 * Touch up README with technologies
 * Bring in express for routing and serving assets
+* Check bug where scripts need to be compiled twice on cold server start (express might fix this)
 * Look into server side templating with React
 * Port original tweetbeat assets to node app, using websockets directly
 * Show 'connecting' loading screen
