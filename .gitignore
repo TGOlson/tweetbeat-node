@@ -2,16 +2,12 @@ node_modules
 npm-debug.log
 .env
 
-# Tweetbeat assets.
-assets-old/.bundle
-assets-old/log/*.log
-assets-old/tmp/*
-assets-old/.env
-assets-old/.DS_Store
-
-app/vendor
+# Original Tweetbeat assets
+assets_old/.bundle
+assets_old/log/*.log
+assets_old/tmp/*
+assets_old/.env
+assets_old/.DS_Store
 
 # Compiled assets
-public/js
-public/css
-public/*.html
+public

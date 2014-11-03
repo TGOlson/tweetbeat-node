@@ -1,3 +1,7 @@
+/*
+ * Internal dependencies
+ */
+
 var Dispatcher = require('flux').Dispatcher,
     AppDispatcher = new Dispatcher();
 

@@ -9,9 +9,9 @@ var _ = require('lodash');
  * Internal dependencies
  */
 
-var SYNTH_PAD_SETTINGS = require('../constants/synth-pad-settings'),
-    AppDispatcher = require('../dispatcher'),
-    ActionTypes = require('../constants/action-types');
+var AppDispatcher = require('../dispatcher'),
+    ActionTypes = require('../constants/action-types'),
+    _pads = require('../constants/synth-pad-settings');
 
 
 /*
@@ -19,10 +19,7 @@ var SYNTH_PAD_SETTINGS = require('../constants/synth-pad-settings'),
  */
 
 var SynthPadStore = {},
-    CHANGE_EVENT = 'change',
-
-    // private synth-pad data
-    _pads = SYNTH_PAD_SETTINGS;
+    CHANGE_EVENT = 'change';
 
 SynthPadStore._changeListeners = [];
 

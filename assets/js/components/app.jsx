@@ -10,7 +10,8 @@ var React = require('react');
  */
 
 var Synth = require('./synth.jsx'),
-    SYNTH_PAD_SETTINGS = require('../constants/synth-pad-settings');
+    SynthPadStore = require('../stores/synth-pad-store');
+
 
 /*
  * Module definition
@@ -20,8 +21,10 @@ var App = {};
 
 // bootstrap entire component tree
 App.start = function() {
-  var target = document.getElementById('content');
-  React.render(<Synth pads={SYNTH_PAD_SETTINGS} />, target);
+  var target = document.getElementById('content'),
+      padSettings = SynthPadStore.getAll();
+
+  React.render(<Synth pads={padSettings} />, target);
 };
 
 // load component with async call like so:
