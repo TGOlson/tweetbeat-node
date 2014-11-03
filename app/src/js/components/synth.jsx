@@ -1,13 +1,10 @@
-/** @jsx React.DOM */
+var SynthPad = require('./synth-pad.jsx'),
+    SynthPadStore = require('../stores/synth-pad-store');
 
 var Synth = React.createClass({
 
   componentDidMount() {
-    // manually set a timeout to allow store to load
-    // TODO: use require or browserify
-    setTimeout(() => {
-      SynthPadStore.addChangeListener(this._onChange);
-    }, 500);
+    SynthPadStore.addChangeListener(this._onChange);
   },
 
   _onChange() {
@@ -18,7 +15,7 @@ var Synth = React.createClass({
   render() {
     var pads =  this.props.pads.map(function(pad, index) {
       return (
-          <Pad key={index}
+          <SynthPad key={index}
             index={index}
             shortcut={pad.shortcut}
             isHit={pad.isHit}
@@ -37,3 +34,5 @@ var Synth = React.createClass({
     );
   }
 });
+
+module.exports = Synth;

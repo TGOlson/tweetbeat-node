@@ -19,10 +19,11 @@ $ npm install
 $ bower install
 ```
 
-Install gulp
+Install global build modules
 
 ```
-$ npm install gulp -g
+$ npm install -g gulp
+$ npm install -g browserify
 ```
 
 Create a `.env` file with valid credentials
@@ -90,7 +91,8 @@ curl localhost:8080/topics
 * Look into server side templating with React
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
-* Look into browserify and require.js
+* Migrate bower components to npm
+* Add watchify for build caching (https://www.npmjs.org/package/watchify)
 * Show 'connecting' loading screen
 * Show error if websocket not connected or not supported.
 * ?

@@ -1,10 +1,11 @@
-// initialize the react components
-// TODO: move this to a better place
+var App = require('./components/app.jsx'),
+    Socket = require('./services/socket');
+
 App.start();
 
 
 // dirty proof of concept stuff
-// TODO: clean this up
+// TODO: clean this up - migrate to react components
 $(init);
 
 function init() {

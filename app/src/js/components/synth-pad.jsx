@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
+var AppActions = require('../actions/synth-actions');
 
-var Pad = React.createClass({
+var SynthPad = React.createClass({
   handlePadHit() {
     AppActions.padDown(this.props);
 
@@ -27,3 +27,5 @@ var Pad = React.createClass({
     );
   }
 });
+
+module.exports = SynthPad;

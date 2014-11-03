@@ -47,7 +47,7 @@ class Socket {
   }
 
   emit(event, data) {
-    let handler = this._events[event];
+    var handler = this._events[event];
     if(handler) handler(data);
   }
 
@@ -58,7 +58,7 @@ class Socket {
 
   _setMessageHandler(handler) {
     this._socket.onmessage = (event) => {
-      let data = JSON.parse(event.data);
+      var data = JSON.parse(event.data);
       handler(data);
     };
   }
@@ -104,7 +104,7 @@ class Socket {
   // events should be an object of keywords with associated callbacks
   // in the case of tweetbeat, the callbacks are calls to audio plays
   _viewEvents() {
-    let events = this._events;
+    var events = this._events;
 
     // later this might want to map functions to their respective audio
     // so output looks like
@@ -121,3 +121,5 @@ class Socket {
     return this._socket.readyState === 1;
   }
 }
+
+module.exports = Socket;
