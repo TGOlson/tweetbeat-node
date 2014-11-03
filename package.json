@@ -5,8 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "test": "npm test",
-    "start": "STREAM=true node server/server.js",
-    "postinstall": "bower install"
+    "start": "STREAM=true node server/server.js"
   },
   "repository": {
     "type": "git",

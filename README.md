@@ -12,15 +12,10 @@ Client side code is written using ES6, and makes use of a similar event-driven p
 
 ## Setup
 
-Install dependencies (note: `npm install` will trigger a `bower install`)
+Install dependencies
 
 ```
 $ npm install
-```
-
-Install global build modules
-
-```
 $ npm install -g gulp
 ```
 
@@ -39,9 +34,11 @@ Run the app
 $ gulp
 ```
 
-This will compile necessary assets from `src/` to `public/`, as well as start the server. Asset compilation can be done manually using `gulp compile`.
+This will compile necessary assets from `assets/` to `public/`, as well as start the server. Asset compilation can be done manually using `gulp compile`.
 
-However, because re-connections to the Twitter steaming API are monitored, this will not start the Twitter stream. To start the app with the Twitter stream enabled
+(note: if the browser has trouble finding `bundle.js`, try restarting the server)
+
+In addition, because re-connections to the Twitter steaming API are monitored, this will not start the Twitter stream. To start the app with the Twitter stream enabled
 
 ```
 $ gulp --stream
@@ -90,8 +87,5 @@ curl localhost:8080/topics
 * Bring in express for routing and serving assets
 * Look into server side templating with React
 * Port original tweetbeat assets to node app, using websockets directly
-* Redo client-side app - look into react.
-* Migrate bower components to npm
-* Add watchify for build caching (https://www.npmjs.org/package/watchify)
 * Show 'connecting' loading screen
 * Show error if websocket not connected or not supported.
