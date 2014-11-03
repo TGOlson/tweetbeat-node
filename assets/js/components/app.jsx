@@ -10,6 +10,7 @@ var React = require('react');
  */
 
 var Synth = require('./synth.jsx'),
+    TopicList = require('./topic-list.jsx'),
     SynthPadStore = require('../stores/synth-pad-store');
 
 
@@ -17,19 +18,28 @@ var Synth = require('./synth.jsx'),
  * Module definition
  */
 
-var App = {};
+var App = React.createClass({
+  render() {
+    var padSettings = SynthPadStore.getAll();
+
+    return (
+        <div>
+          <TopicList topics={this.props.topics} />
+          <Synth pads={padSettings} />
+        </div>
+      );
+  }
+});
 
 // bootstrap entire component tree
 App.start = function() {
-  var target = document.getElementById('content'),
-      padSettings = SynthPadStore.getAll();
+  var target = document.getElementById('content');
 
-  React.render(<Synth pads={padSettings} />, target);
+  // TODO: find way to have components asynchronously load
+  $.get('/topics', function(topics) {
+    React.render(<App topics={topics} />, target);
+  });
+
 };
-
-// load component with async call like so:
-// $.getJSON('inbox.json', function(emails) {
-//   React.renderComponent(<App emails={emails} />, document.body);
-// });
 
 module.exports = App;
