@@ -1,56 +1,64 @@
 var gulp       = require('gulp'),
     browserify = require('browserify'),
+    watchify   = require('watchify'),
     reactify   = require('reactify'),
     source     = require('vinyl-source-stream'),
+    print      = require('gulp-print'),
     concat     = require('gulp-concat'),
-    exclude    = require('gulp-ignore').exclude,
     less       = require('gulp-less'),
     clean      = require('gulp-clean'),
     nodemon    = require('gulp-nodemon'),
     argv       = require('yargs').argv;
 
 
-var entryFile = './app/src/js/app.js',
+var entryFile = './assets/js/app.js',
 
     scriptPaths = [
-      './app/src/js/**/*.js'
-    ],
-
-    // vendor files need to be manually added to this list
-    // note: each vendor file should include a corresponding .min.js file
-    vendorScriptPaths = [
-      './app/vendor/flux/dist/Flux.js',
-      './app/vendor/lodash/dist/lodash.js',
-      './app/vendor/react/react.js',
-      './app/vendor/react/react-with-addons.js'
+      './assets/js/**/*.js*'
     ],
 
     lessPaths = [
-
-      // this will release the floodgates and compile all old tweetbeat styles
-      // './src/less/**/*.less'
-
-      './app/src/less/*.less'
+      './assets/less/*.less'
     ],
 
     htmlPaths = [
-      './app/src/*.html'
+      './assets/*.html'
+    ],
+
+    staticPaths = [
+      './assets/static/**/*'
     ];
 
 
 gulp.task('scripts', function() {
-  browserify(entryFile, {debug: true})
-    .transform(reactify, {es6: true})
-    .bundle()
-    .pipe(source('main.js'))
-    .pipe(gulp.dest('./public/js'));
+  var bundle = browserify(watchify.args),
+      watchedBundle = watchify(bundle);
+
+  watchedBundle.add(entryFile);
+
+  watchedBundle.on('update', function() {
+    buildBundle(watchedBundle);
+  });
+
+  watchedBundle.on('log', function(message) {
+    log('Bundle compiled - ' + message);
+  });
+
+  buildBundle(watchedBundle);
 });
 
-gulp.task('vendor-scripts', function() {
-  gulp.src(vendorScriptPaths)
-    .pipe(concat('vendor.js'))
+function buildBundle(watchedBundle) {
+  watchedBundle.transform(reactify, {es6: true})
+    .bundle()
+    .pipe(source('bundle.js'))
     .pipe(gulp.dest('./public/js'));
-});
+}
+
+function log(message) {
+  gulp.src('./').pipe(print(function() {
+    return message;
+  }));
+}
 
 gulp.task('less', function() {
   gulp.src(lessPaths)
@@ -64,36 +72,34 @@ gulp.task('html', function() {
     .pipe(gulp.dest('./public'));
 });
 
-gulp.task('clean', function() {
-  var compiledFiles = [
-    './public/**/*.html',
-    './public/js',
-    './public/css',
-  ];
+gulp.task('static', function() {
+  gulp.src(staticPaths)
+    .pipe(gulp.dest('./public'));
+});
 
-  gulp.src(compiledFiles, {read: false})
+gulp.task('clean', function() {
+  gulp.src('./public', {read: false})
     .pipe(clean());
 });
 
-gulp.task('compile', ['scripts', 'vendor-scripts', 'less', 'html']);
+gulp.task('compile', ['scripts', 'less', 'html', 'static']);
 
 gulp.task('watch', function(){
-  gulp.watch(scriptPaths, ['scripts']);
   gulp.watch(lessPaths, ['less']);
   gulp.watch(htmlPaths, ['html']);
 });
 
 gulp.task('server', function() {
   var options = {
-    script: './server/server.js'
+    script: './server/server.js',
+    watch: './server',
+    env: {
+      STREAM: argv.stream
+    }
   };
 
-  if(argv.stream) {
-    options.env = {STREAM: true};
-  }
-
   nodemon(options).on('restart', function(){
-    console.log('Server restarted.');
+    log('Server restarted.');
   });
 });
 

@@ -1,9 +1,7 @@
-var EventEmitter = require('events').EventEmitter,
-  util = require('util');
+/*
+ * Third-party dependencies
+ */
 
-var EventHub = function() {};
+var EventEmitter = require('events').EventEmitter;
 
-util.inherits(EventHub, EventEmitter);
-
-// export singleton instance of EventHub
-module.exports = new EventHub();
+module.exports = new EventEmitter();

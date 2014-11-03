@@ -2,7 +2,7 @@
   "name": "tweetbeat-node",
   "version": "0.0.0",
   "description": "Tweetbeat in node.",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "npm test",
     "start": "STREAM=true node server/server.js",
@@ -19,20 +19,25 @@
   },
   "homepage": "https://github.com/TGOlson/tweetbeat-node",
   "dependencies": {
+    "flux": "^2.0.1",
+    "react": "^0.12.0",
+    "twitter": "^0.2.9",
+    "ws": "^0.4.32"
+  },
+  "devDependencies": {
     "browserify": "^6.2.0",
     "dotenv": "^0.4.0",
     "gulp": "^3.8.9",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.4.1",
-    "gulp-ignore": "^1.2.1",
     "gulp-less": "^1.3.6",
     "gulp-nodemon": "^1.0.4",
+    "gulp-print": "^1.1.0",
     "lodash": "^2.4.1",
     "nodemon": "^1.2.1",
     "reactify": "^0.15.2",
-    "twitter": "^0.2.9",
     "vinyl-source-stream": "^1.0.0",
-    "ws": "^0.4.32",
+    "watchify": "^2.1.1",
     "yargs": "^1.3.2"
   }
 }

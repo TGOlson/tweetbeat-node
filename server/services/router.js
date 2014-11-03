@@ -1,7 +1,15 @@
-// Third party libraries
+/*
+ * Third-party dependencies
+ */
+
 var url = require('url'),
-  fs = require('fs'),
-  _ = require('lodash');
+    fs = require('fs'),
+    _ = require('lodash');
+
+
+/*
+ * Module definition
+ */
 
 var Router = {
   routes: {

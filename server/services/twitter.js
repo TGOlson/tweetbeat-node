@@ -1,6 +1,14 @@
-// Third party libraries
+/*
+ * Third-party dependencies
+ */
+
 var TwitterClient = require('twitter'),
-  _ = require('lodash');
+    _ = require('lodash');
+
+
+/*
+ * Module definition
+ */
 
 var Twitter = {
   _trackingData: null,

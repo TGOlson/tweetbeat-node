@@ -1,0 +1,46 @@
+.pad {
+  display: inline-block;
+  width: 110px;
+  height: 110px;
+  margin: 15px;
+  position: relative;
+  list-style: none;
+  background-color: #eeeeee;
+  border: 10px solid #bdc3c7;
+  border-bottom: 10px solid #95a5a6;
+  color: #dddddd;
+  cursor: default;
+
+  &.pad-hit {
+    color: #e74c3c;
+    background-color: #dddddd;
+    border-bottom: 10px solid #777777;
+  }
+
+  .shortcut {
+    position: absolute;
+    display: none;
+    top: 5%;
+    left: 10%;
+    font-size: 25px;
+    color: #dddddd;
+  }
+
+  .topic-drop-area {
+    position: absolute;
+    top: 50%;
+    margin-top: -9px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    cursor: move;
+  }
+
+  .pad-name {
+    color: #cccccc;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+    left: 3px;
+  }
+}

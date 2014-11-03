@@ -1,13 +1,20 @@
-// Third party libraries
-var _ = require('lodash'),
-  WebSocketServer = require('ws').Server;
+/*
+ * Third-party dependencies
+ */
 
-// Internal modules
+var _ = require('lodash'),
+    WebSocketServer = require('ws').Server;
+
+
+/*
+ * Internal dependencies
+ */
+
 var EventHub = require('./event-hub');
 
 
 /*
- * Socket Constructor
+ * Module definition
  */
 
 var Socket = function(socket) {

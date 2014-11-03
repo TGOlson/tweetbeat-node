@@ -16,14 +16,12 @@ Install dependencies (note: `npm install` will trigger a `bower install`)
 
 ```
 $ npm install
-$ bower install
 ```
 
 Install global build modules
 
 ```
 $ npm install -g gulp
-$ npm install -g browserify
 ```
 
 Create a `.env` file with valid credentials
@@ -85,9 +83,11 @@ curl localhost:8080/topics
 * http://facebook.github.io/flux/docs/todo-list.html
 * https://github.com/enaqx/awesome-react
 * https://github.com/prabirshrestha/hn-react
+* http://facebook.github.io/react/docs/events.html
 
 ## TODO
 * Touch up README with technologies
+* Bring in express for routing and serving assets
 * Look into server side templating with React
 * Port original tweetbeat assets to node app, using websockets directly
 * Redo client-side app - look into react.
@@ -95,4 +95,3 @@ curl localhost:8080/topics
 * Add watchify for build caching (https://www.npmjs.org/package/watchify)
 * Show 'connecting' loading screen
 * Show error if websocket not connected or not supported.
-* ?

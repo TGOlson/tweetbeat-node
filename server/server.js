@@ -1,42 +1,20 @@
-// Third party libraries
+/*
+ * Third-party dependencies
+ */
+
 var http = require('http'),
-  dotenv = require('dotenv').load();
+    dotenv = require('dotenv').load();
 
-// Internal modules
+
+/*
+ * Internal dependencies
+ */
+
 var Twitter = require('./services/twitter'),
-  Router = require('./services/router'),
-  Socket = require('./services/socket'),
-  EventHub = require('./services/event-hub');
-
-// topic list for tracking tweets
-var TOPICS = [
-  "Coffee",
-  "Tea",
-  "DBCsleeps",
-  "Canada",
-  "USA",
-  "California",
-  "Tesla",
-  "Spring",
-  "Summer",
-  "Autumn",
-  "Winter",
-  "Santa",
-  "Snowman",
-  "Moltar",
-  "Hurricane",
-  "Tornado",
-  "Earthquake",
-  "Tsunami",
-  "Blizzard",
-  "Godzilla",
-  "King Kong",
-  "John Lennon",
-  "Voltar",
-  "Tapioca",
-  "Star Wars",
-  "Xolov"
-];
+    Router = require('./services/router'),
+    Socket = require('./services/socket'),
+    EventHub = require('./services/event-hub'),
+    TOPICS = require('./constants/topics');
 
 
 /*
