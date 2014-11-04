@@ -13,28 +13,28 @@ var AppDispatcher = require('../dispatcher'),
 var SynthActions = {
   padDown(pad) {
     AppDispatcher.handleViewAction({
-      actionType: ActionTypes.PAD_DOWN,
+      type: ActionTypes.PAD_DOWN,
       pad: pad
     });
   },
 
   padUp(pad) {
     AppDispatcher.handleViewAction({
-      actionType: ActionTypes.PAD_UP,
+      type: ActionTypes.PAD_UP,
       pad: pad
     });
   },
 
   keyDown(keyCode) {
     AppDispatcher.handleViewAction({
-      actionType: ActionTypes.KEY_DOWN,
+      type: ActionTypes.KEY_DOWN,
       keyCode: keyCode
     });
   },
 
   keyUp(keyCode) {
     AppDispatcher.handleViewAction({
-      actionType: ActionTypes.KEY_UP,
+      type: ActionTypes.KEY_UP,
       keyCode: keyCode
     });
   }

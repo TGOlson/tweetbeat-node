@@ -12,6 +12,7 @@ var React = require('react');
 var Synth = require('./synth.jsx'),
     TopicList = require('./topic-list.jsx'),
     SynthPadStore = require('../stores/synth-pad-store');
+    TopicStore = require('../stores/topic-store');
 
 
 /*
@@ -20,12 +21,12 @@ var Synth = require('./synth.jsx'),
 
 var App = React.createClass({
   render() {
-    var padSettings = SynthPadStore.getAll();
+    var synthPads = SynthPadStore.getAll();
 
     return (
         <div>
-          <TopicList topics={this.props.topics} />
-          <Synth pads={padSettings} />
+          <TopicList />
+          <Synth pads={synthPads} />
         </div>
       );
   }
@@ -34,12 +35,7 @@ var App = React.createClass({
 // bootstrap entire component tree
 App.start = function() {
   var target = document.getElementById('content');
-
-  // TODO: find way to have components asynchronously load
-  $.get('/topics', function(topics) {
-    React.render(<App topics={topics} />, target);
-  });
-
+  React.render(<App />, target);
 };
 
 module.exports = App;

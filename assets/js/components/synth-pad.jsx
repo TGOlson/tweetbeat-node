@@ -10,7 +10,7 @@ var React = require('react'),
  * Internal dependencies
  */
 
-var AppActions = require('../actions/synth-actions');
+var SynthActions = require('../actions/synth-actions');
 
 
 /*
@@ -19,11 +19,11 @@ var AppActions = require('../actions/synth-actions');
 
 var SynthPad = React.createClass({
   handlePadDown() {
-    AppActions.padDown(this.props.pad);
+    SynthActions.padDown(this.props.pad);
   },
 
   handlePadUp() {
-    AppActions.padUp(this.props.pad);
+    SynthActions.padUp(this.props.pad);
   },
 
   render() {

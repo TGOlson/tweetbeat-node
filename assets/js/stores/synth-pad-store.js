@@ -86,21 +86,21 @@ SynthPadStore.removeChangeListener = function(callback) {
 // clean this up with switch statement or something else
 AppDispatcher.register(function(payload) {
   var action = payload.action,
-      actionType = action.actionType;
+      type = action.type;
 
-  if(actionType === ActionTypes.PAD_DOWN) {
+  if(type === ActionTypes.PAD_DOWN) {
     SynthPadStore.padDown(action.pad);
   }
 
-  if(actionType === ActionTypes.PAD_UP) {
+  if(type === ActionTypes.PAD_UP) {
     SynthPadStore.padUp(action.pad);
   }
 
-  if(actionType === ActionTypes.KEY_DOWN) {
+  if(type === ActionTypes.KEY_DOWN) {
     SynthPadStore.keyDown(action.keyCode);
   }
 
-  if(actionType === ActionTypes.KEY_UP) {
+  if(type === ActionTypes.KEY_UP) {
     SynthPadStore.keyUp(action.keyCode);
   }
 

@@ -10,7 +10,8 @@ var React = require('react'),
  * Internal dependencies
  */
 
-var Topic = require('./topic.jsx');
+var Topic = require('./topic.jsx'),
+    TopicStore = require('../stores/topic-store');
 
 
 /*
@@ -18,6 +19,13 @@ var Topic = require('./topic.jsx');
  */
 
 var TopicList = React.createClass({
+  getInitialState: function() {
+    return {topics: []};
+  },
+
+  componentDidMount() {
+    TopicStore.addChangeListener(this._onChange);
+  },
 
   render() {
     var topics = _.map(this.props.topics, function(topic, index) {
@@ -33,6 +41,12 @@ var TopicList = React.createClass({
         </ul>
       </div>
     );
+  },
+
+  _onChange() {
+    var topics = TopicStore.getAll();
+    this.props.topics = topics;
+    this.setState({topics});
   },
 });
 

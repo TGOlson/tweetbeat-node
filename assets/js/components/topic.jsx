@@ -8,28 +8,42 @@ var React = require('react'),
 
 
 /*
+ * Internal dependencies
+ */
+
+var TopicActions = require('../actions/topic-actions');
+
+
+/*
  * Module definition
  */
 
 var Topic = React.createClass({
-
-  // TODO: stop handling topic click/drag internally
-  // use actions and dispatcher
   handleClick() {
-    this.props.isActive = !this.props.isActive;
-    this.setState(this.props);
+    var topic = this.props.topic,
+        action;
+
+    if(topic.isActive) {
+      action = TopicActions.deselectTopic;
+    } else {
+      action = TopicActions.selectTopic;
+    }
+
+    action(topic);
   },
 
   render() {
+    var topic = this.props.topic;
+
     var classes = classSet({
       topic: true,
-      active: this.props.isActive
+      active: topic.isActive
     });
 
     return (
       <li className={classes} onClick={this.handleClick}>
-        <span className="topic-text">{this.props.topic}</span>
-        <span className="count">0</span>
+        <span className="topic-text">{topic.text}</span>
+        <span className="count">{topic.count}</span>
       </li>
     );
   },
