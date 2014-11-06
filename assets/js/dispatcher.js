@@ -19,12 +19,11 @@ AppDispatcher.handleViewAction = function(action) {
   });
 };
 
-// TODO:
-// AppDispatcher.handleServerAction = function(action) {
-//   this.dispatch({
-//     source: 'SERVER_ACTION',
-//     action: action
-//   });
-// };
+AppDispatcher.handleServerAction = function(action) {
+  this.dispatch({
+    source: 'SERVER_ACTION',
+    action: action
+  });
+};
 
 module.exports = AppDispatcher;

@@ -13,6 +13,7 @@ var Synth = require('./synth.jsx'),
     TopicList = require('./topic-list.jsx'),
     SynthPadStore = require('../stores/synth-pad-store');
     TopicStore = require('../stores/topic-store');
+    TweetStore = require('../stores/tweet-store').init();
 
 
 /*

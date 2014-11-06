@@ -16,5 +16,8 @@ module.exports = keyMirror({
 
   // topic actions
   TOPIC_SELECTED: null,
-  TOPIC_DESELECTED: null
+  TOPIC_DESELECTED: null,
+
+  // tweet actions
+  TWEET_RECEIVED: null
 });

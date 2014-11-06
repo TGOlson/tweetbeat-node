@@ -23,7 +23,7 @@ var TopicActions = {
       type: ActionTypes.TOPIC_DESELECTED,
       topic: topic
     });
-  },
+  }
 };
 
 module.exports = TopicActions;

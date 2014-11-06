@@ -10,7 +10,8 @@ var _ = require('lodash');
  */
 
 var AppDispatcher = require('../dispatcher'),
-    ActionTypes = require('../constants/action-types');
+    ActionTypes = require('../constants/action-types'),
+    TopicActions = require('../actions/topic-actions');
 
 
 /*
@@ -46,23 +47,25 @@ TopicStore.getAll = function() {
   return _topics;
 };
 
-TopicStore.selectTopic = function(topic) {
-  this.setTopicActiveState(topic, true);
+TopicStore.select = function(_topic) {
+  var topic = this.find(_topic);
+  topic.isActive = true;
 };
 
-TopicStore.deselectTopic = function(topic) {
-  this.setTopicActiveState(topic, false);
+TopicStore.deselect = function(_topic) {
+  var topic = this.find(_topic);
+  topic.isActive = false;
 };
 
-TopicStore.setTopicActiveState = function(topic, isActive) {
-  var _topic = _.find(_topics, function(_topic) {
+TopicStore.incrementCount = function(_topic) {
+  var topic = this.find(_topic);
+  topic.count++;
+};
+
+TopicStore.find = function(topic) {
+  return _.find(_topics, function(_topic) {
     return topic.text === _topic.text;
   });
-
-  // temp for debugging
-  _topic.count++;
-
-  _topic.isActive = isActive;
 };
 
 TopicStore.emitChange = function() {
@@ -83,16 +86,23 @@ TopicStore.removeChangeListener = function(callback) {
 AppDispatcher.register(function(payload) {
   var action = payload.action,
       type = action.type,
-      topic = action.topic,
       hasChange;
 
   if(type === ActionTypes.TOPIC_SELECTED) {
-    TopicStore.selectTopic(topic);
+    TopicStore.select(action.topic);
     hasChange = true;
   }
 
   if(type === ActionTypes.TOPIC_DESELECTED) {
-    TopicStore.deselectTopic(topic);
+    TopicStore.deselect(action.topic);
+    hasChange = true;
+  }
+
+  if(type === ActionTypes.TWEET_RECEIVED) {
+
+    // convert tweet to topic format
+    // TODO: make a util for this
+    TopicStore.incrementCount({text: action.tweet.topic});
     hasChange = true;
   }
 
