@@ -11,6 +11,7 @@ var _ = require('lodash');
 
 var AppDispatcher = require('../dispatcher'),
     ActionTypes = require('../constants/action-types'),
+    SynthActions = require('../actions/synth-actions'),
     _pads = require('../constants/synth-pad-settings');
 
 
@@ -27,46 +28,38 @@ SynthPadStore.getAll = function() {
   return _pads;
 };
 
-SynthPadStore.padDown = function(pad, hasPad) {
-  this.setPadHitState(pad, true, hasPad);
+SynthPadStore.padDown = function(_pad) {
+  var pad = this.find(_pad);
+  pad.isHit = true;
 };
 
-SynthPadStore.padUp = function(pad, hasPad) {
-  this.setPadHitState(pad, false, hasPad);
+SynthPadStore.padUp = function(_pad) {
+  var pad = this.find(_pad);
+  pad.isHit = false;
 };
 
-SynthPadStore.setPadHitState = function(pad, isHit, hasPad) {
-  var _pad;
-
-  // if hasPad is true we skip searching the pads
-  // some actions already have the correct pad object at this point
-  if(hasPad) {
-    _pad = pad;
-  } else {
-    _pad = _.find(_pads, function(_pad) {
-      return _pad.name === pad.name;
-    });
-  }
-
-  _pad.isHit = isHit;
+SynthPadStore.find = function(pad) {
+  return _.find(_pads, function(_pad) {
+    return _pad.name === pad.name;
+  });
 };
 
 SynthPadStore.keyDown = function(keyCode) {
-  this.handleKeyPress(keyCode, true);
+  var pad = this.findByKeyCode(keyCode);
+  if(pad) this.padDown(pad);
 };
 
 SynthPadStore.keyUp = function(keyCode) {
-  this.handleKeyPress(keyCode, false);
+  var pad = this.findByKeyCode(keyCode);
+  if(pad) this.padUp(pad);
 };
 
-SynthPadStore.handleKeyPress = function(keyCode, isDown) {
+SynthPadStore.findByKeyCode = function(keyCode) {
   var character = String.fromCharCode(keyCode);
 
-  var _pad = _.find(_pads, function(_pad) {
+  return _.find(_pads, function(_pad) {
     return _pad.shortcut === character.toLowerCase();
   });
-
-  if(_pad) this.setPadHitState(_pad, isDown, true);
 };
 
 SynthPadStore.emitChange = function() {

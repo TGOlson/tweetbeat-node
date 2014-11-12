@@ -10,8 +10,7 @@ var _ = require('lodash');
  */
 
 var AppDispatcher = require('../dispatcher'),
-    ActionTypes = require('../constants/action-types'),
-    TopicActions = require('../actions/topic-actions');
+    ActionTypes = require('../constants/action-types');
 
 
 /*
@@ -34,7 +33,7 @@ TopicStore.init = function() {
 TopicStore.init();
 
 function mapTopics(topics) {
-  return _.map(topics, function(topic) {
+  return _.map(topics, function(topic, i) {
     return {
       text: topic,
       isActive: false,

@@ -11,9 +11,11 @@ var React = require('react');
 
 var Synth = require('./synth.jsx'),
     TopicList = require('./topic-list.jsx'),
-    SynthPadStore = require('../stores/synth-pad-store');
+    SynthPadStore = require('../stores/synth-pad-store'),
     TopicStore = require('../stores/topic-store');
-    TweetStore = require('../stores/tweet-store').init();
+
+require('../stores/audio-store').init();
+require('../stores/tweet-store').init();
 
 
 /*

@@ -6,6 +6,7 @@ var keyMirror = require('react/lib/keyMirror');
 
 // keyMirror mirrors object keys to string replicas
 // => PAD_DOWN: 'PAD_DOWN'
+
 module.exports = keyMirror({
 
   // synth-pad actions

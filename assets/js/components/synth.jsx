@@ -28,6 +28,10 @@ var Synth = React.createClass({
 
   render() {
     var pads = _.map(this.props.pads, function(pad, index) {
+
+      // set index so pad knows what position it is in
+      pad.index = index;
+
       return <SynthPad key={index} pad={pad} />;
     });
 

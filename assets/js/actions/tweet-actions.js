@@ -12,7 +12,7 @@ var AppDispatcher = require('../dispatcher'),
 
 var TweetActions = {
   newTweet(tweet) {
-    AppDispatcher.handleViewAction({
+    AppDispatcher.handleServerAction({
       type: ActionTypes.TWEET_RECEIVED,
       tweet: tweet
     });
