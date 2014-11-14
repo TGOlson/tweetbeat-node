@@ -6,16 +6,13 @@ var AppDispatcher = require('../dispatcher'),
     ActionTypes = require('../constants/action-types'),
     Audio = require('../services/audio');
 
-
 /*
  * Module definition
  */
 
 var AudioStore = {};
 
-AudioStore.init = function() {
-  Audio.init();
-};
+AudioStore.init = Audio.init;
 
 AudioStore.playSound = function(pad) {
   Audio.playSample(pad.index);
@@ -30,17 +27,13 @@ AppDispatcher.register(function(payload) {
     AudioStore.playSound(action.pad);
   }
 
+  // TODO: stop audio on pad up
   // if(type === ActionTypes.PAD_UP) {
   //   SynthPadStore.padUp(action.pad);
   // }
 
-  // if(type === ActionTypes.TWEET_RECEIVED) {
-  //   console.log(action.tweet);
-  // }
-
   // AudioStore does not have any view components
   // therefore it does not emit change events
-  // AudioStore.emitChange();
 });
 
 module.exports = AudioStore;

@@ -44,14 +44,14 @@ SynthPadStore.find = function(pad) {
   });
 };
 
-SynthPadStore.keyDown = function(keyCode) {
-  var pad = this.findByKeyCode(keyCode);
-  if(pad) this.padDown(pad);
-};
+SynthPadStore.handleKeyEvent = function(e) {
+  var pad = this.findByKeyCode(e.keyCode),
+      type = e.type;
 
-SynthPadStore.keyUp = function(keyCode) {
-  var pad = this.findByKeyCode(keyCode);
-  if(pad) this.padUp(pad);
+  if(pad) {
+    if(type === 'keyup') SynthActions.padUp(pad);
+    if(type === 'keydown') SynthActions.padDown(pad);
+  }
 };
 
 SynthPadStore.findByKeyCode = function(keyCode) {
@@ -79,25 +79,20 @@ SynthPadStore.removeChangeListener = function(callback) {
 // clean this up with switch statement or something else
 AppDispatcher.register(function(payload) {
   var action = payload.action,
-      type = action.type;
+      type = action.type,
+      hasChange;
 
   if(type === ActionTypes.PAD_DOWN) {
     SynthPadStore.padDown(action.pad);
+    hasChange = true;
   }
 
   if(type === ActionTypes.PAD_UP) {
     SynthPadStore.padUp(action.pad);
+    hasChange = true;
   }
 
-  if(type === ActionTypes.KEY_DOWN) {
-    SynthPadStore.keyDown(action.keyCode);
-  }
-
-  if(type === ActionTypes.KEY_UP) {
-    SynthPadStore.keyUp(action.keyCode);
-  }
-
-  SynthPadStore.emitChange();
+  if(hasChange) SynthPadStore.emitChange();
 });
 
 module.exports = SynthPadStore;

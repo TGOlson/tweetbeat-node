@@ -23,20 +23,6 @@ var SynthActions = {
       type: ActionTypes.PAD_UP,
       pad: pad
     });
-  },
-
-  keyDown(keyCode) {
-    AppDispatcher.handleViewAction({
-      type: ActionTypes.KEY_DOWN,
-      keyCode: keyCode
-    });
-  },
-
-  keyUp(keyCode) {
-    AppDispatcher.handleViewAction({
-      type: ActionTypes.KEY_UP,
-      keyCode: keyCode
-    });
   }
 };
 

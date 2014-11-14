@@ -35,10 +35,11 @@ var App = React.createClass({
   }
 });
 
-// bootstrap entire component tree
 App.start = function() {
   var target = document.getElementById('content');
   React.render(<App />, target);
 };
+
+$(window).on('keyup keydown', (e) => SynthPadStore.handleKeyEvent(e));
 
 module.exports = App;
