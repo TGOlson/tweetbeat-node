@@ -2,7 +2,8 @@
  * Third-party dependencies
  */
 
-var _ = require('lodash');
+var _ = require('lodash'),
+    Q = require('q');
 
 
 /*
@@ -22,11 +23,18 @@ var Audio = {};
 
 var context;
 
-var sampleBuffers = [];
+Audio.isReady = false;
+
+Audio._sampleBuffers = [];
 var masterGain;
 var filter;
 var audioConstants;
 var currentLibrary;
+
+
+/*
+ * Public methods
+ */
 
 Audio.init = function(){
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -36,45 +44,20 @@ Audio.init = function(){
   initializeFilter();
   initializeGain();
   connectNodes();
-  bufferSamples();
+  this._bufferSamples();
+  return this;
 };
 
 Audio.playSample = function(index){
   var source = context.createBufferSource();
-  source.buffer = sampleBuffers[currentLibrary][index];
+  source.buffer = this._sampleBuffers[currentLibrary][index];
   filter.on ? source.connect(filter) : source.connect(masterGain);
   source.start(0);
 };
 
-function changeVolume(volume){
+Audio.changeVolume = function(volume){
   masterGain.gain.value = (volume / 100) * (volume / 100);
-}
-
-function loadSample(sampleURL, lib, index){
-  var request = new XMLHttpRequest();
-  request.open('GET', sampleURL, true);
-  request.responseType = 'arraybuffer';
-
-  request.onload = function(){
-    context.decodeAudioData(request.response, function(buffer){
-      sampleBuffers[lib][index] = buffer;
-    }, onerror);
-  };
-
-  request.onerror = function(){
-    alert('BufferLoader : XHR error');
-  };
-
-  request.send();
-}
-
-function initializeConstants(){
-  return {
-    nyquist: context.sampleRate * 0.5,
-    noctaves: Math.log(context.sampleRate / 15) / Math.LN2,
-    qmult: 3/15
-  };
-}
+};
 
 function changeFrequency(x){
   var powerOfTwo = audioConstants.noctaves * (x / 150 - 1);
@@ -93,6 +76,60 @@ function changeLibrary(lib){
   currentLibrary = lib;
 }
 
+
+/*
+ * Private methods
+ */
+
+Audio._bufferSamples = function(){
+  var promises = _.map(sampleLibrary, (sampleSet) => {
+    return this._loadSampleSet(sampleSet);
+  });
+
+  return Q.all(promises).then(function(buffers) {
+    Audio._sampleBuffers = buffers;
+    Audio.isReady = true;
+  });
+};
+
+Audio._loadSampleSet = function(sampleSet) {
+  var promises = _.map(sampleSet, (sampleURL) => {
+    return this._loadSample(sampleURL);
+  });
+
+  return Q.all(promises);
+};
+
+Audio._loadSample = function(sampleURL){
+  var deferred = Q.defer(),
+      request = new XMLHttpRequest();
+
+  request.open('GET', sampleURL, true);
+  request.responseType = 'arraybuffer';
+
+  request.onload = function(){
+    context.decodeAudioData(request.response, function(buffer) {
+      deferred.resolve(buffer);
+    });
+  };
+
+  request.onerror = function(){
+    alert('BufferLoader : XHR error');
+  };
+
+  request.send();
+
+  return deferred.promise;
+};
+
+function initializeConstants(){
+  return {
+    nyquist: context.sampleRate * 0.5,
+    noctaves: Math.log(context.sampleRate / 15) / Math.LN2,
+    qmult: 3/15
+  };
+}
+
 function initializeFilter(){
   filter = context.createBiquadFilter();
   filter.type = 0;
@@ -108,19 +145,6 @@ function initializeGain(){
 function connectNodes(){
   filter.connect(masterGain);
   masterGain.connect(context.destination);
-}
-
-function bufferSamples(){
-  _.map(sampleLibrary, function(sampleSet, i) {
-
-    // create empty container for sample set
-    // TODO: this should be a named object
-    sampleBuffers[i] = [];
-
-    _.map(sampleSet, function(sample, j) {
-      loadSample(sample, i, j);
-    });
-  });
 }
 
 module.exports = Audio;

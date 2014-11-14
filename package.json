@@ -19,6 +19,7 @@
   "homepage": "https://github.com/TGOlson/tweetbeat-node",
   "dependencies": {
     "flux": "^2.0.1",
+    "q": "^1.1.1",
     "react": "^0.12.0",
     "twitter": "^0.2.9",
     "ws": "^0.4.32"

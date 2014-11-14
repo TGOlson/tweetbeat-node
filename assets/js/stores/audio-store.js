@@ -6,15 +6,19 @@ var AppDispatcher = require('../dispatcher'),
     ActionTypes = require('../constants/action-types'),
     Audio = require('../services/audio');
 
+
 /*
  * Module definition
  */
 
 var AudioStore = {};
 
-AudioStore.init = Audio.init;
+AudioStore.init = function() {
+  Audio.init();
+};
 
 AudioStore.playSound = function(pad) {
+  if(!Audio.isReady) throw new Error('Audio not yet buffered');
   Audio.playSample(pad.index);
 };
 

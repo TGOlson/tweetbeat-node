@@ -89,28 +89,11 @@ class Socket {
   // naive implementation of events
   // each event can only have one listener
   _removeHandler(event) {
-
-    // for dev purposes only
-    if(!this._events[event]) console.log('No handler set for', event);
-
     delete this._events[event];
   }
 
   _modifySubscriptions(action, event) {
     this.send({action, event});
-  }
-
-  // development only
-  // events should be an object of keywords with associated callbacks
-  // in the case of tweetbeat, the callbacks are calls to audio plays
-  _viewEvents() {
-    var events = this._events;
-
-    // later this might want to map functions to their respective audio
-    // so output looks like
-    // {'USA': 'audio-file-name', etc.}
-
-    console.log(events);
   }
 
   // CONNECTING  0 The connection is not yet open.

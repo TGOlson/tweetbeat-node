@@ -17,7 +17,6 @@ var Synth = require('./synth.jsx'),
 require('../stores/audio-store').init();
 require('../stores/tweet-store').init();
 
-
 /*
  * Module definition
  */
