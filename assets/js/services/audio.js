@@ -21,10 +21,10 @@ var Audio = {};
 
 // TODO: clean up module syntax
 
-var context;
 
 Audio.isReady = false;
 
+Audio._context = null;
 Audio._sampleBuffers = [];
 
 // default current library to first library
@@ -40,19 +40,18 @@ var audioConstants;
  */
 
 Audio.init = function(){
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  context = new AudioContext();
-  currentLibrary = 0;
+  this._setContext();
   audioConstants = initializeConstants();
   initializeFilter();
   initializeGain();
   connectNodes();
   this._bufferSamples();
+
   return this;
 };
 
 Audio.playSample = function(index){
-  var source = context.createBufferSource();
+  var source = this._context.createBufferSource();
 
   // create getBuffer method
   source.buffer = this._getBuffer(index);
@@ -86,6 +85,11 @@ Audio.changeLibrary = function(library){
  * Private methods
  */
 
+Audio._setContext = function() {
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  this._context = new AudioContext();
+};
+
 Audio._bufferSamples = function(){
   this._sampleBuffers = _.clone(SAMPLE_LIBRARIES);
 
@@ -116,7 +120,7 @@ Audio._loadSample = function(sampleURL){
   request.responseType = 'arraybuffer';
 
   request.onload = function(){
-    context.decodeAudioData(request.response, function(buffer) {
+    Audio._context.decodeAudioData(request.response, function(buffer) {
       deferred.resolve(buffer);
     });
   };
@@ -136,27 +140,27 @@ Audio._getBuffer = function(index) {
 
 function initializeConstants(){
   return {
-    nyquist: context.sampleRate * 0.5,
-    noctaves: Math.log(context.sampleRate / 15) / Math.LN2,
+    nyquist: Audio._context.sampleRate * 0.5,
+    noctaves: Math.log(Audio._context.sampleRate / 15) / Math.LN2,
     qmult: 3/15
   };
 }
 
 function initializeFilter(){
-  filter = context.createBiquadFilter();
+  filter = Audio._context.createBiquadFilter();
   filter.type = 0;
   filter.frequency.value = 20000;
   filter.on = false;
 }
 
 function initializeGain(){
-  masterGain = context.createGain();
+  masterGain = Audio._context.createGain();
   masterGain.gain.value = 1;
 }
 
 function connectNodes(){
   filter.connect(masterGain);
-  masterGain.connect(context.destination);
+  masterGain.connect(Audio._context.destination);
 }
 
 module.exports = Audio;
