@@ -18,7 +18,11 @@ AudioStore.init = function() {
 };
 
 AudioStore.playSound = function(pad) {
+
+  // TODO: handle this in a better way
+  // maybe include a loading screen for audio buffering
   if(!Audio.isReady) throw new Error('Audio not yet buffered');
+
   Audio.playSample(pad.index);
 };
 

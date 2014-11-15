@@ -19,64 +19,62 @@ var SAMPLE_LIBRARIES = require('../constants/sample-libraries');
 
 var Audio = {};
 
-// TODO: clean up module syntax
-
-
 Audio.isReady = false;
 
-Audio._context = null;
-Audio._sampleBuffers = [];
-
-// default current library to first library
 Audio._currentLibrary = SAMPLE_LIBRARIES[0];
-
-var masterGain;
-var filter;
-var audioConstants;
+Audio._sampleBuffers = [];
+Audio._masterGain = null;
+Audio._constants = null;
+Audio._context = null;
+Audio._filter = null;
 
 
 /*
  * Public methods
  */
 
-Audio.init = function(){
+Audio.init = function() {
   this._setContext();
-  audioConstants = initializeConstants();
-  initializeFilter();
-  initializeGain();
-  connectNodes();
+  this._initializeConstants();
+  this._initializeFilter();
+  this._initializeGain();
+  this._connectNodes();
   this._bufferSamples();
 
   return this;
 };
 
-Audio.playSample = function(index){
-  var source = this._context.createBufferSource();
+Audio.playSample = function(index) {
+  var source = this._context.createBufferSource(),
+      values = this._filter.on ? this._filter : this._masterGain;
 
-  // create getBuffer method
   source.buffer = this._getBuffer(index);
-  filter.on ? source.connect(filter) : source.connect(masterGain);
+  source.connect(values);
   source.start(0);
 };
 
-Audio.changeVolume = function(volume){
-  masterGain.gain.value = (volume / 100) * (volume / 100);
+Audio.changeVolume = function(volume) {
+  this._masterGain.gain.value = (volume / 100) * (volume / 100);
 };
 
-function changeFrequency(x){
-  var powerOfTwo = audioConstants.noctaves * (x / 150 - 1);
-  filter.frequency.value = Math.pow(2, powerOfTwo) * audioConstants.nyquist;
-}
+Audio.changeFrequency = function(x) {
+  var powerOfTwo = this._constants.noctaves * (x / 150 - 1);
+  this._filter.frequency.value = Math.pow(2, powerOfTwo) * this._constants.nyquist;
+};
 
-function changeQ(y){
-  filter.Q.value = y * audioConstants.qmult;
-}
+Audio.changeQ = function(y) {
+  this._filter.Q.value = y * this._constants.qmult;
+};
 
-function toggleFilter(){
-  filter.on = !filter.on;
-}
+Audio.toggleFilter = function() {
+  this._filter.on = !this._filter.on;
+};
 
-Audio.changeLibrary = function(library){
+Audio.changeLibrary = function(name) {
+  var library = _.find(SAMPLE_LIBRARIES, {library: name});
+
+  if(!library) throw new Error('Unknown library: ' + library);
+
   this._currentLibrary = library;
 };
 
@@ -90,7 +88,7 @@ Audio._setContext = function() {
   this._context = new AudioContext();
 };
 
-Audio._bufferSamples = function(){
+Audio._bufferSamples = function() {
   this._sampleBuffers = _.clone(SAMPLE_LIBRARIES);
 
   var promises = _.map(this._sampleBuffers, (sampleSet, i) => {
@@ -112,20 +110,20 @@ Audio._loadSampleSet = function(sampleSet) {
   return Q.all(promises);
 };
 
-Audio._loadSample = function(sampleURL){
+Audio._loadSample = function(sampleURL) {
   var deferred = Q.defer(),
       request = new XMLHttpRequest();
 
   request.open('GET', sampleURL, true);
   request.responseType = 'arraybuffer';
 
-  request.onload = function(){
-    Audio._context.decodeAudioData(request.response, function(buffer) {
+  request.onload = () => {
+    this._context.decodeAudioData(request.response, function(buffer) {
       deferred.resolve(buffer);
     });
   };
 
-  request.onerror = function(){
+  request.onerror = () => {
     alert('BufferLoader : XHR error');
   };
 
@@ -138,29 +136,29 @@ Audio._getBuffer = function(index) {
   return this._currentLibrary.samples[index];
 };
 
-function initializeConstants(){
-  return {
-    nyquist: Audio._context.sampleRate * 0.5,
-    noctaves: Math.log(Audio._context.sampleRate / 15) / Math.LN2,
+Audio._initializeConstants = function(){
+  this._constants = {
+    nyquist: this._context.sampleRate * 0.5,
+    noctaves: Math.log(this._context.sampleRate / 15) / Math.LN2,
     qmult: 3/15
   };
-}
+};
 
-function initializeFilter(){
-  filter = Audio._context.createBiquadFilter();
-  filter.type = 0;
-  filter.frequency.value = 20000;
-  filter.on = false;
-}
+Audio._initializeFilter = function() {
+  this._filter = this._context.createBiquadFilter();
+  this._filter.type = 0;
+  this._filter.frequency.value = 20000;
+  this._filter.on = false;
+};
 
-function initializeGain(){
-  masterGain = Audio._context.createGain();
-  masterGain.gain.value = 1;
-}
+Audio._initializeGain = function() {
+  this._masterGain = this._context.createGain();
+  this._masterGain.gain.value = 1;
+};
 
-function connectNodes(){
-  filter.connect(masterGain);
-  masterGain.connect(Audio._context.destination);
-}
+Audio._connectNodes = function() {
+  this._filter.connect(this._masterGain);
+  this._masterGain.connect(this._context.destination);
+};
 
 module.exports = Audio;

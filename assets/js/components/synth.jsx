@@ -12,6 +12,7 @@ var React = require('react'),
  */
 
 var SynthPad = require('./synth-pad.jsx'),
+    SynthControls = require('./synth-controls.jsx'),
     SynthPadStore = require('../stores/synth-pad-store');
 
 
@@ -47,6 +48,7 @@ var Synth = React.createClass({
         <div className="synth-pads">
           {pads}
         </div>
+        <SynthControls />
       </div>
     );
   },
