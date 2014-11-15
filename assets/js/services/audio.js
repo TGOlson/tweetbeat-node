@@ -70,12 +70,16 @@ Audio.toggleFilter = function() {
   this._filter.on = !this._filter.on;
 };
 
-Audio.changeLibrary = function(name) {
-  var library = _.find(SAMPLE_LIBRARIES, {library: name});
+Audio.getCurrentLibraryType = function() {
+  return this._currentLibrary.type;
+};
 
-  if(!library) throw new Error('Unknown library: ' + library);
+Audio.prevLib = function() {
+  this._toggleLibByIndexShift(-1);
+};
 
-  this._currentLibrary = library;
+Audio.nextLib = function() {
+  this._toggleLibByIndexShift(1);
 };
 
 
@@ -160,5 +164,18 @@ Audio._connectNodes = function() {
   this._filter.connect(this._masterGain);
   this._masterGain.connect(this._context.destination);
 };
+
+Audio._toggleLibByIndexShift = function(shift) {
+  var index = _.indexOf(SAMPLE_LIBRARIES, this._currentLibrary),
+      library = SAMPLE_LIBRARIES[index + shift];
+
+  if(library) this._changeLibrary(library);
+};
+
+Audio._changeLibrary = function(library) {
+  if(!library) throw new Error('Unknown library.');
+  this._currentLibrary = library;
+};
+
 
 module.exports = Audio;

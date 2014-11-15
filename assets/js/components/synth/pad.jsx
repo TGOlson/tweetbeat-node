@@ -10,7 +10,7 @@ var React = require('react'),
  * Internal dependencies
  */
 
-var SynthActions = require('../actions/synth-actions');
+var SynthActions = require('../../actions/synth-actions');
 
 
 /*

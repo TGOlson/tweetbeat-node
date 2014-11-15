@@ -4,7 +4,7 @@
 
 module.exports = [
   {
-    library: 'Space',
+    type: 'Space',
     samples: [
       'audio/Dminor_space_chord_root.mp3',
       'audio/Dminor_space_chord_root+2.mp3',
@@ -18,7 +18,7 @@ module.exports = [
     ]
   },
   {
-    library: 'General',
+    type: 'Natural',
     samples: [
       'audio/D.mp3',
       'audio/D_3rd.mp3',
@@ -31,7 +31,7 @@ module.exports = [
     ]
   },
   {
-    library: 'HipHop',
+    type: 'HipHop',
     samples: [
       'audio/hiphop/yo.mp3',
       'audio/hiphop/nelly.mp3',
@@ -45,7 +45,7 @@ module.exports = [
     ]
   },
   {
-    library: 'Mario',
+    type: 'Mario',
     samples: [
       'audio/mario/1up.mp3',
       'audio/mario/Bowser.mp3',

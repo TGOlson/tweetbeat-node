@@ -9,7 +9,7 @@ var React = require('react');
  * Internal dependencies
  */
 
-var Synth = require('./synth.jsx'),
+var Synth = require('./synth/synth.jsx'),
     TopicList = require('./topic-list.jsx'),
     SynthPadStore = require('../stores/synth-pad-store'),
     TopicStore = require('../stores/topic-store');

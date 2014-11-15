@@ -11,9 +11,9 @@ var React = require('react'),
  * Internal dependencies
  */
 
-var SynthPad = require('./synth-pad.jsx'),
-    SynthControls = require('./synth-controls.jsx'),
-    SynthPadStore = require('../stores/synth-pad-store');
+var SynthPad = require('./pad.jsx'),
+    SynthControls = require('./controls/controls.jsx'),
+    SynthPadStore = require('../../stores/synth-pad-store');
 
 
 /*

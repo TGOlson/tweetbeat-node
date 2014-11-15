@@ -1,0 +1,77 @@
+.library-toggle-container {
+  width: 130px;
+  margin: 0 auto;
+
+  .library-toggle {
+    border: 3px solid #5c5c5c;
+    font-family: digital;
+    background: rgba(72,171,92,.2);
+    font-size: 25px;
+
+    h1 {
+      margin: 7.5px;
+    }
+  }
+
+  .arrow {
+    width: 0;
+    height: 0;
+    display: inline-block;
+    margin: 3px 20px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+  }
+
+  .left {
+    border-right: 10px solid black;
+
+    &:hover {
+      border-right-color: #444;
+    }
+  }
+
+  .right {
+    border-left: 10px solid black;
+
+    &:hover {
+      border-left-color: #444;
+    }
+  }
+}
+
+.volume-slider {
+  height: 150px;
+  width: 12px;
+  margin: 30px auto 0;
+  background-color: grey;
+}
+
+.filter-pad {
+  height: 150px;
+  width: 150px;
+  margin-top: 30px;
+  border-radius: 10px;
+  border: 7px solid #5c5c5c;
+  cursor: url("/images/glow2.png"), auto;
+  background: url("/images/xybackground.png");
+  background-size: contain;
+}
+
+.filter-toggle {
+  position: absolute;
+  left: 54px;
+  bottom: -30px;
+  border-radius: 5px;
+  border: 1px solid #5c5c5c;
+  background: #adadad;
+  font-family: Electrolize;
+  color: rgba(15, 8, 15, 0.6);
+
+  &.filter-on {
+    background: rgba(254, 65, 65, 0.8);
+  }
+}
+
+.filter-toggle:focus {
+  outline: none;
+}
