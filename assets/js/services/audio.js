@@ -10,7 +10,7 @@ var _ = require('lodash'),
  * Internal dependencies
  */
 
-var sampleLibrary = require('../constants/sample-library');
+var SAMPLE_LIBRARIES = require('../constants/sample-libraries');
 
 
 /*
@@ -26,10 +26,13 @@ var context;
 Audio.isReady = false;
 
 Audio._sampleBuffers = [];
+
+// default current library to first library
+Audio._currentLibrary = SAMPLE_LIBRARIES[0];
+
 var masterGain;
 var filter;
 var audioConstants;
-var currentLibrary;
 
 
 /*
@@ -50,7 +53,9 @@ Audio.init = function(){
 
 Audio.playSample = function(index){
   var source = context.createBufferSource();
-  source.buffer = this._sampleBuffers[currentLibrary][index];
+
+  // create getBuffer method
+  source.buffer = this._getBuffer(index);
   filter.on ? source.connect(filter) : source.connect(masterGain);
   source.start(0);
 };
@@ -72,9 +77,9 @@ function toggleFilter(){
   filter.on = !filter.on;
 }
 
-function changeLibrary(lib){
-  currentLibrary = lib;
-}
+Audio.changeLibrary = function(library){
+  this._currentLibrary = library;
+};
 
 
 /*
@@ -82,18 +87,21 @@ function changeLibrary(lib){
  */
 
 Audio._bufferSamples = function(){
-  var promises = _.map(sampleLibrary, (sampleSet) => {
-    return this._loadSampleSet(sampleSet);
+  this._sampleBuffers = _.clone(SAMPLE_LIBRARIES);
+
+  var promises = _.map(this._sampleBuffers, (sampleSet, i) => {
+    return this._loadSampleSet(sampleSet).then((samples) => {
+      this._sampleBuffers[i].samples = samples;
+    });
   });
 
-  return Q.all(promises).then(function(buffers) {
-    Audio._sampleBuffers = buffers;
-    Audio.isReady = true;
+  return Q.all(promises).then(() => {
+    this.isReady = true;
   });
 };
 
 Audio._loadSampleSet = function(sampleSet) {
-  var promises = _.map(sampleSet, (sampleURL) => {
+  var promises = _.map(sampleSet.samples, (sampleURL) => {
     return this._loadSample(sampleURL);
   });
 
@@ -120,6 +128,10 @@ Audio._loadSample = function(sampleURL){
   request.send();
 
   return deferred.promise;
+};
+
+Audio._getBuffer = function(index) {
+  return this._currentLibrary.samples[index];
 };
 
 function initializeConstants(){
